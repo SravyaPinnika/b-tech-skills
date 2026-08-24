@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as SkillsSlugRouteImport } from './routes/skills.$slug'
+import { Route as ApiPublicHooksRefreshToolsRouteImport } from './routes/api/public/hooks/refresh-tools'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,51 @@ const SkillsSlugRoute = SkillsSlugRouteImport.update({
   path: '/skills/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksRefreshToolsRoute =
+  ApiPublicHooksRefreshToolsRouteImport.update({
+    id: '/api/public/hooks/refresh-tools',
+    path: '/api/public/hooks/refresh-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/tools': typeof ToolsRoute
   '/skills/$slug': typeof SkillsSlugRoute
+  '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/tools': typeof ToolsRoute
   '/skills/$slug': typeof SkillsSlugRoute
+  '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/tools': typeof ToolsRoute
   '/skills/$slug': typeof SkillsSlugRoute
+  '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tools' | '/skills/$slug'
+  fullPaths:
+    '/' | '/tools' | '/skills/$slug' | '/api/public/hooks/refresh-tools'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tools' | '/skills/$slug'
-  id: '__root__' | '/' | '/tools' | '/skills/$slug'
+  to: '/' | '/tools' | '/skills/$slug' | '/api/public/hooks/refresh-tools'
+  id:
+    | '__root__'
+    | '/'
+    | '/tools'
+    | '/skills/$slug'
+    | '/api/public/hooks/refresh-tools'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ToolsRoute: typeof ToolsRoute
   SkillsSlugRoute: typeof SkillsSlugRoute
+  ApiPublicHooksRefreshToolsRoute: typeof ApiPublicHooksRefreshToolsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +99,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SkillsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/refresh-tools': {
+      id: '/api/public/hooks/refresh-tools'
+      path: '/api/public/hooks/refresh-tools'
+      fullPath: '/api/public/hooks/refresh-tools'
+      preLoaderRoute: typeof ApiPublicHooksRefreshToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +113,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ToolsRoute: ToolsRoute,
   SkillsSlugRoute: SkillsSlugRoute,
+  ApiPublicHooksRefreshToolsRoute: ApiPublicHooksRefreshToolsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
