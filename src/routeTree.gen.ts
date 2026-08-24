@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedToolsRouteImport } from './routes/_authenticated/tools'
 import { Route as AuthenticatedSkillsSlugRouteImport } from './routes/_authenticated/skills.$slug'
 import { Route as ApiPublicHooksRefreshToolsRouteImport } from './routes/api/public/hooks/refresh-tools'
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedToolsRoute = AuthenticatedToolsRouteImport.update({
@@ -43,12 +49,14 @@ const ApiPublicHooksRefreshToolsRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/tools': typeof AuthenticatedToolsRoute
   '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/tools': typeof AuthenticatedToolsRoute
   '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
@@ -57,6 +65,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/_authenticated/tools': typeof AuthenticatedToolsRoute
   '/_authenticated/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
@@ -64,13 +73,23 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/tools' | '/skills/$slug' | '/api/public/hooks/refresh-tools'
+    | '/'
+    | '/auth'
+    | '/tools'
+    | '/skills/$slug'
+    | '/api/public/hooks/refresh-tools'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tools' | '/skills/$slug' | '/api/public/hooks/refresh-tools'
+  to:
+    | '/'
+    | '/auth'
+    | '/tools'
+    | '/skills/$slug'
+    | '/api/public/hooks/refresh-tools'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/auth'
     | '/_authenticated/tools'
     | '/_authenticated/skills/$slug'
     | '/api/public/hooks/refresh-tools'
@@ -79,6 +98,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   ApiPublicHooksRefreshToolsRoute: typeof ApiPublicHooksRefreshToolsRoute
 }
 
@@ -96,6 +116,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/tools': {
@@ -138,6 +165,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   ApiPublicHooksRefreshToolsRoute: ApiPublicHooksRefreshToolsRoute,
 }
 export const routeTree = rootRouteImport
