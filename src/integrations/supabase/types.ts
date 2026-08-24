@@ -14,7 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      job_state: {
+        Row: {
+          job_name: string
+          last_message: string | null
+          last_run_at: string | null
+          last_status: string | null
+          lease_until: string | null
+          paused: boolean
+        }
+        Insert: {
+          job_name: string
+          last_message?: string | null
+          last_run_at?: string | null
+          last_status?: string | null
+          lease_until?: string | null
+          paused?: boolean
+        }
+        Update: {
+          job_name?: string
+          last_message?: string | null
+          last_run_at?: string | null
+          last_status?: string | null
+          lease_until?: string | null
+          paused?: boolean
+        }
+        Relationships: []
+      }
+      tools: {
+        Row: {
+          added_week: string
+          branches: string[]
+          category: string
+          created_at: string
+          description: string
+          id: string
+          name: string
+          url: string | null
+          why_it_matters: string | null
+        }
+        Insert: {
+          added_week?: string
+          branches?: string[]
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          name: string
+          url?: string | null
+          why_it_matters?: string | null
+        }
+        Update: {
+          added_week?: string
+          branches?: string[]
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          url?: string | null
+          why_it_matters?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
