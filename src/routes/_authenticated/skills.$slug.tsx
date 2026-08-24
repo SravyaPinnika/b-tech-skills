@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { skillBySlug } from "@/data/skills";
 
-export const Route = createFileRoute("/skills/$slug")({
+export const Route = createFileRoute("/_authenticated/skills/$slug")({
   loader: ({ params }) => {
     const skill = skillBySlug(params.slug);
     if (!skill) throw notFound();
@@ -32,7 +32,7 @@ function SkillNotFound() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-20 text-center">
       <h1 className="text-2xl font-bold tracking-tight">Skill not found</h1>
-      <Link to="/" className="mt-4 inline-block font-mono text-xs uppercase tracking-widest text-primary">
+      <Link to="/dashboard" className="mt-4 inline-block font-mono text-xs uppercase tracking-widest text-primary">
         Back to roadmap
       </Link>
     </div>
@@ -46,7 +46,7 @@ function SkillDetail() {
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
-          <Link to="/" className="font-mono text-xs uppercase tracking-tighter text-muted-foreground">
+          <Link to="/dashboard" className="font-mono text-xs uppercase tracking-tighter text-muted-foreground">
             ← Roadmap
           </Link>
           <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
