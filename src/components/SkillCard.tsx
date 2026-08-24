@@ -4,7 +4,7 @@ import type { Skill } from "@/data/skills";
 export function SkillCard({ skill, index }: { skill: Skill; index: number }) {
   return (
     <Link
-      to="/skills/$slug"
+      to="/_authenticated/skills/$slug"
       params={{ slug: skill.slug }}
       className="group block rounded-lg border border-border bg-surface/60 p-4 rise transition-colors hover:border-primary/40"
       style={{ animationDelay: `${100 + index * 60}ms` }}
