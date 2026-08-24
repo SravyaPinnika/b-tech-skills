@@ -10,8 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ToolsRouteImport } from './routes/tools'
-import { Route as SkillsSlugRouteImport } from './routes/skills.$slug'
+import { Route as AuthenticatedToolsRouteImport } from './routes/_authenticated/tools'
+import { Route as AuthenticatedSkillsSlugRouteImport } from './routes/_authenticated/skills.$slug'
 import { Route as ApiPublicHooksRefreshToolsRouteImport } from './routes/api/public/hooks/refresh-tools'
 
 const IndexRoute = IndexRouteImport.update({
@@ -19,13 +19,13 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ToolsRoute = ToolsRouteImport.update({
-  id: '/tools',
+const AuthenticatedToolsRoute = AuthenticatedToolsRouteImport.update({
+  id: '/_authenticated/tools',
   path: '/tools',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SkillsSlugRoute = SkillsSlugRouteImport.update({
-  id: '/skills/$slug',
+const AuthenticatedSkillsSlugRoute = AuthenticatedSkillsSlugRouteImport.update({
+  id: '/_authenticated/skills/$slug',
   path: '/skills/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
@@ -38,21 +38,21 @@ const ApiPublicHooksRefreshToolsRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/tools': typeof ToolsRoute
-  '/skills/$slug': typeof SkillsSlugRoute
+  '/tools': typeof AuthenticatedToolsRoute
+  '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/tools': typeof ToolsRoute
-  '/skills/$slug': typeof SkillsSlugRoute
+  '/tools': typeof AuthenticatedToolsRoute
+  '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/tools': typeof ToolsRoute
-  '/skills/$slug': typeof SkillsSlugRoute
+  '/_authenticated/tools': typeof AuthenticatedToolsRoute
+  '/_authenticated/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
 export interface FileRouteTypes {
@@ -64,15 +64,15 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/tools'
-    | '/skills/$slug'
+    | '/_authenticated/tools'
+    | '/_authenticated/skills/$slug'
     | '/api/public/hooks/refresh-tools'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ToolsRoute: typeof ToolsRoute
-  SkillsSlugRoute: typeof SkillsSlugRoute
+  AuthenticatedToolsRoute: typeof AuthenticatedToolsRoute
+  AuthenticatedSkillsSlugRoute: typeof AuthenticatedSkillsSlugRoute
   ApiPublicHooksRefreshToolsRoute: typeof ApiPublicHooksRefreshToolsRoute
 }
 
@@ -85,18 +85,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tools': {
-      id: '/tools'
+    '/_authenticated/tools': {
+      id: '/_authenticated/tools'
       path: '/tools'
       fullPath: '/tools'
-      preLoaderRoute: typeof ToolsRouteImport
+      preLoaderRoute: typeof AuthenticatedToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/skills/$slug': {
-      id: '/skills/$slug'
+    '/_authenticated/skills/$slug': {
+      id: '/_authenticated/skills/$slug'
       path: '/skills/$slug'
       fullPath: '/skills/$slug'
-      preLoaderRoute: typeof SkillsSlugRouteImport
+      preLoaderRoute: typeof AuthenticatedSkillsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/refresh-tools': {
@@ -111,8 +111,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ToolsRoute: ToolsRoute,
-  SkillsSlugRoute: SkillsSlugRoute,
+  AuthenticatedToolsRoute: AuthenticatedToolsRoute,
+  AuthenticatedSkillsSlugRoute: AuthenticatedSkillsSlugRoute,
   ApiPublicHooksRefreshToolsRoute: ApiPublicHooksRefreshToolsRoute,
 }
 export const routeTree = rootRouteImport
