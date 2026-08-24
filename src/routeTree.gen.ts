@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as SkillsSlugRouteImport } from './routes/skills.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsRoute = ToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SkillsSlugRoute = SkillsSlugRouteImport.update({
@@ -25,27 +31,31 @@ const SkillsSlugRoute = SkillsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/tools': typeof ToolsRoute
   '/skills/$slug': typeof SkillsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/tools': typeof ToolsRoute
   '/skills/$slug': typeof SkillsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/tools': typeof ToolsRoute
   '/skills/$slug': typeof SkillsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/skills/$slug'
+  fullPaths: '/' | '/tools' | '/skills/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/skills/$slug'
-  id: '__root__' | '/' | '/skills/$slug'
+  to: '/' | '/tools' | '/skills/$slug'
+  id: '__root__' | '/' | '/tools' | '/skills/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ToolsRoute: typeof ToolsRoute
   SkillsSlugRoute: typeof SkillsSlugRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/skills/$slug': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ToolsRoute: ToolsRoute,
   SkillsSlugRoute: SkillsSlugRoute,
 }
 export const routeTree = rootRouteImport
