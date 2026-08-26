@@ -43,7 +43,7 @@ function ToolsPage() {
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
-          <Link to="/dashboard" className="font-mono text-xs uppercase tracking-tighter text-muted-foreground">
+          <Link to="/" className="font-mono text-xs uppercase tracking-tighter text-muted-foreground">
             ← Roadmap
           </Link>
           <div className="flex items-center gap-1.5">
