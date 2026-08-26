@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedToolsRouteImport } from './routes/_authenticated/tools'
+import { Route as AuthenticatedDsaTopicRouteImport } from './routes/_authenticated/dsa.$topic'
 import { Route as AuthenticatedSkillsSlugRouteImport } from './routes/_authenticated/skills.$slug'
 import { Route as ApiPublicHooksRefreshToolsRouteImport } from './routes/api/public/hooks/refresh-tools'
 
@@ -35,6 +36,11 @@ const AuthenticatedToolsRoute = AuthenticatedToolsRouteImport.update({
   path: '/tools',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDsaTopicRoute = AuthenticatedDsaTopicRouteImport.update({
+  id: '/dsa/$topic',
+  path: '/dsa/$topic',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSkillsSlugRoute = AuthenticatedSkillsSlugRouteImport.update({
   id: '/skills/$slug',
   path: '/skills/$slug',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/tools': typeof AuthenticatedToolsRoute
+  '/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
@@ -58,6 +65,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/tools': typeof AuthenticatedToolsRoute
+  '/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/tools': typeof AuthenticatedToolsRoute
+  '/_authenticated/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/_authenticated/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
@@ -76,6 +85,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/tools'
+    | '/dsa/$topic'
     | '/skills/$slug'
     | '/api/public/hooks/refresh-tools'
   fileRoutesByTo: FileRoutesByTo
@@ -83,6 +93,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/tools'
+    | '/dsa/$topic'
     | '/skills/$slug'
     | '/api/public/hooks/refresh-tools'
   id:
@@ -91,6 +102,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/tools'
+    | '/_authenticated/dsa/$topic'
     | '/_authenticated/skills/$slug'
     | '/api/public/hooks/refresh-tools'
   fileRoutesById: FileRoutesById
@@ -132,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedToolsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dsa/$topic': {
+      id: '/_authenticated/dsa/$topic'
+      path: '/dsa/$topic'
+      fullPath: '/dsa/$topic'
+      preLoaderRoute: typeof AuthenticatedDsaTopicRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/skills/$slug': {
       id: '/_authenticated/skills/$slug'
       path: '/skills/$slug'
@@ -151,11 +170,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedToolsRoute: typeof AuthenticatedToolsRoute
+  AuthenticatedDsaTopicRoute: typeof AuthenticatedDsaTopicRoute
   AuthenticatedSkillsSlugRoute: typeof AuthenticatedSkillsSlugRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedToolsRoute: AuthenticatedToolsRoute,
+  AuthenticatedDsaTopicRoute: AuthenticatedDsaTopicRoute,
   AuthenticatedSkillsSlugRoute: AuthenticatedSkillsSlugRoute,
 }
 
