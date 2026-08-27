@@ -184,4 +184,41 @@ Strategy
         [* * * *  ]  refill adds tokens over time
  empty bucket -> 429 (burst allowed, average capped)`,
   },
+
+  "Two Sum problem theory": {
+    summary:
+      "Two Sum asks for two elements whose values add to a target. It is the canonical example of trading memory for speed: a hash map turns an O(n^2) search into O(n) — the same trade-off behind caches, indexes and dedup tables in system design.",
+    keyPoints: [
+      "Brute force: try every pair -> O(n^2) time, O(1) space.",
+      "Hash map: store value -> index while scanning; for each x check if (target - x) was seen -> O(n) time, O(n) space.",
+      "If the array is sorted, two pointers from both ends solve it in O(n) time and O(1) space.",
+      "Design lesson: the map is a read-through index — the same idea as a DB index or Redis cache in front of a slow scan.",
+      "Follow-ups asked: return all pairs, handle duplicates, Three Sum, and Two Sum on a stream (design the data structure).",
+    ],
+    syntax: {
+      lang: "java",
+      code: `int[] twoSum(int[] a, int target) {
+    Map<Integer, Integer> seen = new HashMap<>();   // value -> index
+    for (int i = 0; i < a.length; i++) {
+        int need = target - a[i];
+        if (seen.containsKey(need)) return new int[]{seen.get(need), i};
+        seen.put(a[i], i);
+    }
+    return new int[]{-1, -1};
+}`,
+    },
+    diagram: `a = [2, 7, 11, 15], target = 9
+
+scan i=0: need 9-2=7  -> not in map -> store {2:0}
+scan i=1: need 9-7=2  -> FOUND at index 0 -> return [0, 1]
+
+map grows like an index:
+ { 2 -> 0 }          one lookup replaces a full inner loop
+
+brute force:        hash map (index):
+ i \ j 0 1 2 3      lookup "need" in O(1)
+   0   . X X X       |
+   1   . . X X       v
+   2   . . . X     found pair in one pass`,
+  },
 };
