@@ -41,6 +41,57 @@ export type Database = {
         }
         Relationships: []
       }
+      recruiters: {
+        Row: {
+          added_week: string
+          branches: string[]
+          company: string
+          created_at: string
+          ctc_range: string | null
+          eligibility: string | null
+          hiring_status: string
+          hiring_window: string | null
+          id: string
+          interview_process: string | null
+          project_expectations: string | null
+          role: string
+          skills: string[]
+          url: string | null
+        }
+        Insert: {
+          added_week?: string
+          branches?: string[]
+          company: string
+          created_at?: string
+          ctc_range?: string | null
+          eligibility?: string | null
+          hiring_status?: string
+          hiring_window?: string | null
+          id?: string
+          interview_process?: string | null
+          project_expectations?: string | null
+          role: string
+          skills?: string[]
+          url?: string | null
+        }
+        Update: {
+          added_week?: string
+          branches?: string[]
+          company?: string
+          created_at?: string
+          ctc_range?: string | null
+          eligibility?: string | null
+          hiring_status?: string
+          hiring_window?: string | null
+          id?: string
+          interview_process?: string | null
+          project_expectations?: string | null
+          role?: string
+          skills?: string[]
+          url?: string | null
+        }
+        Relationships: []
+      }
       tools: {
         Row: {
           added_week: string
