@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { skillBySlug } from "@/data/skills";
+import { topicContent } from "@/data/topicContent";
 
 export const Route = createFileRoute("/_authenticated/skills/$slug")({
   loader: ({ params }) => {
@@ -86,18 +87,75 @@ function SkillDetail() {
           <h2 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
             Topics to cover
           </h2>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {skill.topics.map((topic, i) => (
-              <div
-                key={topic}
-                className="flex items-center gap-3 rounded border border-border bg-surface/60 px-3 py-2"
-              >
-                <span className="font-mono text-[10px] text-primary">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="text-sm">{topic}</span>
-              </div>
-            ))}
+          <div className="grid gap-2">
+            {skill.topics.map((topic, i) => {
+              const content = topicContent(skill.slug, topic);
+              const head = (
+                <>
+                  <span className="font-mono text-[10px] text-primary">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-sm font-medium">{topic}</span>
+                </>
+              );
+              if (!content) {
+                return (
+                  <div
+                    key={topic}
+                    className="flex items-center gap-3 rounded border border-border bg-surface/60 px-3 py-2"
+                  >
+                    {head}
+                  </div>
+                );
+              }
+              return (
+                <details
+                  key={topic}
+                  className="group rounded border border-border bg-surface/60 open:border-primary/40"
+                >
+                  <summary className="flex cursor-pointer items-center gap-3 px-3 py-2 select-none">
+                    {head}
+                    <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-muted-foreground group-open:hidden">
+                      + theory
+                    </span>
+                    <span className="ml-auto hidden font-mono text-[10px] uppercase tracking-widest text-primary group-open:inline">
+                      − close
+                    </span>
+                  </summary>
+                  <div className="space-y-4 border-t border-border px-4 py-4">
+                    <p className="text-sm leading-relaxed text-muted-foreground">{content.summary}</p>
+                    <div>
+                      <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                        Key points
+                      </h3>
+                      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+                        {content.keyPoints.map((p) => (
+                          <li key={p}>{p}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    {content.syntax && (
+                      <div>
+                        <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                          {content.syntax.lang === "text" ? "Example" : `Code (${content.syntax.lang})`}
+                        </h3>
+                        <pre className="mt-2 overflow-x-auto rounded border border-border bg-background p-3 font-mono text-xs leading-relaxed">
+                          {content.syntax.code}
+                        </pre>
+                      </div>
+                    )}
+                    <div>
+                      <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                        Diagram
+                      </h3>
+                      <pre className="mt-2 overflow-x-auto rounded border border-border bg-background p-3 font-mono text-xs leading-relaxed text-primary/90">
+                        {content.diagram}
+                      </pre>
+                    </div>
+                  </div>
+                </details>
+              );
+            })}
           </div>
         </section>
 
