@@ -155,6 +155,7 @@ export const SKILLS: Skill[] = [
       "CAP theorem and consistency models",
       "Message queues and async processing",
       "API design & rate limiting",
+      "Two Sum problem theory",
     ],
     interviewFocus: [
       "Design a URL shortener end to end",
