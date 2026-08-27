@@ -183,12 +183,19 @@ out.add(ni);`,
     },
     {
       name: "Heap-assisted greedy",
-      what "": undefined as never,
-      when: "",
-      identify: "",
-      example: "",
-      code: "",
+      what: "Keep a heap of the currently active choices so you can always release or pick the extreme one.",
+      when: "Meeting rooms II, task scheduler, minimum cost to connect ropes, IPO.",
+      identify: "The greedy decision depends on the smallest/largest of a changing set.",
+      example: "Meeting rooms II with a min-heap of end times.",
+      code: `Arrays.sort(iv, (a, b) -> Integer.compare(a[0], b[0]));
+PriorityQueue<Integer> ends = new PriorityQueue<>();
+for (int[] m : iv) {
+    if (!ends.isEmpty() && ends.peek() <= m[0]) ends.poll();
+    ends.offer(m[1]);
+}
+return ends.size();`,
     },
+
   ],
   examples: [
     {
