@@ -163,7 +163,7 @@ T(n) = 2T(n-1) + O(1)  ->  O(2^n)       (naive fib)`,
     },
     {
       name: "Trade space for time",
-      what "Cache or index data so repeated work becomes a lookup.": "Cache or index data so repeated work becomes a lookup.",
+      what: "Cache or index data so repeated work becomes a lookup.",
       when: "Repeated searches, repeated range sums, repeated subproblems.",
       identify: "The brute force recomputes the same thing.",
       example: "HashSet lookup replacing a nested scan, turning O(n^2) into O(n).",
