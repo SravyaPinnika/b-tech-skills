@@ -46,11 +46,19 @@ function ToolsPage() {
           <Link to="/" className="font-mono text-xs uppercase tracking-tighter text-muted-foreground">
             ← Roadmap
           </Link>
-          <div className="flex items-center gap-1.5">
-            <span className="size-2 animate-pulse rounded-full bg-primary" />
-            <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
-              Auto-updated weekly
-            </span>
+          <div className="flex items-center gap-4">
+            <Link
+              to="/jobs"
+              className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground"
+            >
+              Jobs
+            </Link>
+            <div className="flex items-center gap-1.5">
+              <span className="size-2 animate-pulse rounded-full bg-primary" />
+              <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
+                Auto-updated weekly
+              </span>
+            </div>
           </div>
         </div>
       </header>

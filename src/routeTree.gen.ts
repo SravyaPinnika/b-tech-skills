@@ -12,9 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedJobsRouteImport } from './routes/_authenticated/jobs'
 import { Route as AuthenticatedToolsRouteImport } from './routes/_authenticated/tools'
 import { Route as AuthenticatedDsaTopicRouteImport } from './routes/_authenticated/dsa.$topic'
 import { Route as AuthenticatedSkillsSlugRouteImport } from './routes/_authenticated/skills.$slug'
+import { Route as ApiPublicHooksRefreshRecruitersRouteImport } from './routes/api/public/hooks/refresh-recruiters'
 import { Route as ApiPublicHooksRefreshToolsRouteImport } from './routes/api/public/hooks/refresh-tools'
 
 const IndexRoute = IndexRouteImport.update({
@@ -31,6 +33,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedJobsRoute = AuthenticatedJobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedToolsRoute = AuthenticatedToolsRouteImport.update({
   id: '/tools',
   path: '/tools',
@@ -46,6 +53,12 @@ const AuthenticatedSkillsSlugRoute = AuthenticatedSkillsSlugRouteImport.update({
   path: '/skills/$slug',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicHooksRefreshRecruitersRoute =
+  ApiPublicHooksRefreshRecruitersRouteImport.update({
+    id: '/api/public/hooks/refresh-recruiters',
+    path: '/api/public/hooks/refresh-recruiters',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksRefreshToolsRoute =
   ApiPublicHooksRefreshToolsRouteImport.update({
     id: '/api/public/hooks/refresh-tools',
@@ -56,17 +69,21 @@ const ApiPublicHooksRefreshToolsRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/jobs': typeof AuthenticatedJobsRoute
   '/tools': typeof AuthenticatedToolsRoute
   '/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
+  '/api/public/hooks/refresh-recruiters': typeof ApiPublicHooksRefreshRecruitersRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/jobs': typeof AuthenticatedJobsRoute
   '/tools': typeof AuthenticatedToolsRoute
   '/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
+  '/api/public/hooks/refresh-recruiters': typeof ApiPublicHooksRefreshRecruitersRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
 export interface FileRoutesById {
@@ -74,9 +91,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/jobs': typeof AuthenticatedJobsRoute
   '/_authenticated/tools': typeof AuthenticatedToolsRoute
   '/_authenticated/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/_authenticated/skills/$slug': typeof AuthenticatedSkillsSlugRoute
+  '/api/public/hooks/refresh-recruiters': typeof ApiPublicHooksRefreshRecruitersRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
 }
 export interface FileRouteTypes {
@@ -84,26 +103,32 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/jobs'
     | '/tools'
     | '/dsa/$topic'
     | '/skills/$slug'
+    | '/api/public/hooks/refresh-recruiters'
     | '/api/public/hooks/refresh-tools'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/jobs'
     | '/tools'
     | '/dsa/$topic'
     | '/skills/$slug'
+    | '/api/public/hooks/refresh-recruiters'
     | '/api/public/hooks/refresh-tools'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/jobs'
     | '/_authenticated/tools'
     | '/_authenticated/dsa/$topic'
     | '/_authenticated/skills/$slug'
+    | '/api/public/hooks/refresh-recruiters'
     | '/api/public/hooks/refresh-tools'
   fileRoutesById: FileRoutesById
 }
@@ -111,6 +136,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicHooksRefreshRecruitersRoute: typeof ApiPublicHooksRefreshRecruitersRoute
   ApiPublicHooksRefreshToolsRoute: typeof ApiPublicHooksRefreshToolsRoute
 }
 
@@ -137,6 +163,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/jobs': {
+      id: '/_authenticated/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof AuthenticatedJobsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/tools': {
       id: '/_authenticated/tools'
       path: '/tools'
@@ -158,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSkillsSlugRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/hooks/refresh-recruiters': {
+      id: '/api/public/hooks/refresh-recruiters'
+      path: '/api/public/hooks/refresh-recruiters'
+      fullPath: '/api/public/hooks/refresh-recruiters'
+      preLoaderRoute: typeof ApiPublicHooksRefreshRecruitersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/refresh-tools': {
       id: '/api/public/hooks/refresh-tools'
       path: '/api/public/hooks/refresh-tools'
@@ -169,12 +209,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedJobsRoute: typeof AuthenticatedJobsRoute
   AuthenticatedToolsRoute: typeof AuthenticatedToolsRoute
   AuthenticatedDsaTopicRoute: typeof AuthenticatedDsaTopicRoute
   AuthenticatedSkillsSlugRoute: typeof AuthenticatedSkillsSlugRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedJobsRoute: AuthenticatedJobsRoute,
   AuthenticatedToolsRoute: AuthenticatedToolsRoute,
   AuthenticatedDsaTopicRoute: AuthenticatedDsaTopicRoute,
   AuthenticatedSkillsSlugRoute: AuthenticatedSkillsSlugRoute,
@@ -187,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicHooksRefreshRecruitersRoute: ApiPublicHooksRefreshRecruitersRoute,
   ApiPublicHooksRefreshToolsRoute: ApiPublicHooksRefreshToolsRoute,
 }
 export const routeTree = rootRouteImport

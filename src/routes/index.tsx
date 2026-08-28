@@ -38,12 +38,20 @@ function Home() {
             <span className="font-mono text-xs font-medium uppercase tracking-tighter text-muted-foreground">
               Placement / Ascent Engine
             </span>
-            <Link
-              to="/tools"
-              className="font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-            >
-              Tools feed
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link
+                to="/jobs"
+                className="font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+              >
+                Jobs
+              </Link>
+              <Link
+                to="/tools"
+                className="font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+              >
+                Tools feed
+              </Link>
+            </div>
           </div>
 
           <nav className="flex gap-1 overflow-x-auto pb-1 no-scrollbar">
