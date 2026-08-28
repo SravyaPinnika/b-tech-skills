@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS recruiters_company_key ON public.recruiters (company);
