@@ -124,6 +124,18 @@ function SkillDetail() {
                   </summary>
                   <div className="space-y-4 border-t border-border px-4 py-4">
                     <p className="text-sm leading-relaxed text-muted-foreground">{content.summary}</p>
+                    {content.deepDive && (
+                      <div className="space-y-2">
+                        <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                          In depth
+                        </h3>
+                        {content.deepDive.map((p) => (
+                          <p key={p} className="text-sm leading-relaxed">
+                            {p}
+                          </p>
+                        ))}
+                      </div>
+                    )}
                     <div>
                       <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                         Key points
@@ -152,7 +164,71 @@ function SkillDetail() {
                         {content.diagram}
                       </pre>
                     </div>
+                    {content.example && (
+                      <div className="rounded border border-border bg-background/60 p-3">
+                        <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                          Worked example — {content.example.title}
+                        </h3>
+                        <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">
+                          {content.example.steps.map((s) => (
+                            <li key={s}>{s}</li>
+                          ))}
+                        </ol>
+                        {content.example.result && (
+                          <p className="mt-2 font-mono text-xs text-primary">→ {content.example.result}</p>
+                        )}
+                      </div>
+                    )}
+                    {content.mistakes && (
+                      <div>
+                        <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                          Common mistakes
+                        </h3>
+                        <ul className="mt-2 space-y-2 text-sm">
+                          {content.mistakes.map((m) => (
+                            <li key={m.mistake} className="rounded border border-border/60 px-3 py-2">
+                              <span className="text-destructive">✗ {m.mistake}</span>
+                              <br />
+                              <span className="text-muted-foreground">✓ {m.fix}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {content.interviewQA && (
+                      <div>
+                        <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                          Interview Q&amp;A
+                        </h3>
+                        <ul className="mt-2 space-y-2 text-sm">
+                          {content.interviewQA.map((qa) => (
+                            <li key={qa.q}>
+                              <p className="font-medium">Q. {qa.q}</p>
+                              <p className="text-muted-foreground">A. {qa.a}</p>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {content.practice && (
+                      <div>
+                        <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                          Practice
+                        </h3>
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {content.practice.map((p) => (
+                            <span
+                              key={p}
+                              className="rounded border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground"
+                            >
+                              {p}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
+
                 </details>
               );
             })}
