@@ -7,7 +7,18 @@ export interface TopicContent {
   syntax?: { lang: string; code: string };
   /** Monospace diagram rendered in a <pre> block. */
   diagram: string;
+  /** Longer explanation paragraphs that go beyond the summary. */
+  deepDive?: string[];
+  /** One worked example, dry-run style. */
+  example?: { title: string; steps: string[]; result?: string };
+  /** Frequent student mistakes and the fix. */
+  mistakes?: { mistake: string; fix: string }[];
+  /** Interview questions with model answers. */
+  interviewQA?: { q: string; a: string }[];
+  /** Things to practise / build after reading. */
+  practice?: string[];
 }
+
 
 export type TopicMap = Record<string, TopicContent>;
 
