@@ -59,6 +59,7 @@ function ToolsPage() {
                 Auto-updated weekly
               </span>
             </div>
+            <AuthButton />
           </div>
         </div>
       </header>
