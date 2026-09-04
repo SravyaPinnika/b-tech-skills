@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { AuthButton } from "@/components/AuthButton";
 import { useState } from "react";
 import { listRecruiters, type RecruiterRow } from "@/lib/recruiters.functions";
 
@@ -61,6 +62,7 @@ function JobsPage() {
                 Auto-updated weekly
               </span>
             </div>
+            <AuthButton />
           </div>
         </div>
       </header>

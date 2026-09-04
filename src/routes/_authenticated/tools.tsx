@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { AuthButton } from "@/components/AuthButton";
 import { listTools, type ToolRow } from "@/lib/tools.functions";
 
 export const Route = createFileRoute("/_authenticated/tools")({
@@ -59,6 +60,7 @@ function ToolsPage() {
                 Auto-updated weekly
               </span>
             </div>
+            <AuthButton />
           </div>
         </div>
       </header>
