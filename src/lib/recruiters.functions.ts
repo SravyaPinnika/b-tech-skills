@@ -55,7 +55,7 @@ export const listRecruiters = createServerFn({ method: "GET" }).handler(
       supabase
         .from("recruiters")
         .select(
-          "id, company, role, hiring_status, hiring_window, branches, skills, project_expectations, interview_process, ctc_range, eligibility, url, added_week",
+          "id, company, role, hiring_status, hiring_window, branches, skills, project_expectations, interview_process, ctc_range, eligibility, url, added_week, current_stage, apply_by, process_stages",
         )
         .order("added_week", { ascending: false })
         .order("company", { ascending: true }),
