@@ -15,6 +15,9 @@ export interface RecruiterRow {
   eligibility: string | null;
   url: string | null;
   added_week: string;
+  current_stage: string | null;
+  apply_by: string | null;
+  process_stages: string[];
 }
 
 export interface RecruitersPayload {
