@@ -51,6 +51,7 @@ function Home() {
               >
                 Tools feed
               </Link>
+              <AuthButton />
             </div>
           </div>
 
