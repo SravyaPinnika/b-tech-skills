@@ -44,15 +44,18 @@ export type Database = {
       recruiters: {
         Row: {
           added_week: string
+          apply_by: string | null
           branches: string[]
           company: string
           created_at: string
           ctc_range: string | null
+          current_stage: string | null
           eligibility: string | null
           hiring_status: string
           hiring_window: string | null
           id: string
           interview_process: string | null
+          process_stages: string[]
           project_expectations: string | null
           role: string
           skills: string[]
@@ -60,15 +63,18 @@ export type Database = {
         }
         Insert: {
           added_week?: string
+          apply_by?: string | null
           branches?: string[]
           company: string
           created_at?: string
           ctc_range?: string | null
+          current_stage?: string | null
           eligibility?: string | null
           hiring_status?: string
           hiring_window?: string | null
           id?: string
           interview_process?: string | null
+          process_stages?: string[]
           project_expectations?: string | null
           role: string
           skills?: string[]
@@ -76,15 +82,18 @@ export type Database = {
         }
         Update: {
           added_week?: string
+          apply_by?: string | null
           branches?: string[]
           company?: string
           created_at?: string
           ctc_range?: string | null
+          current_stage?: string | null
           eligibility?: string | null
           hiring_status?: string
           hiring_window?: string | null
           id?: string
           interview_process?: string | null
+          process_stages?: string[]
           project_expectations?: string | null
           role?: string
           skills?: string[]
