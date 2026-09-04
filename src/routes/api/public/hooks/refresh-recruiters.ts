@@ -17,9 +17,6 @@ interface AiRecruiter {
   ctc_range: string;
   eligibility: string;
   url: string;
-  current_stage: string;
-  apply_by: string;
-  process_stages: string[];
 }
 
 export const Route = createFileRoute("/api/public/hooks/refresh-recruiters")({
@@ -79,8 +76,8 @@ export const Route = createFileRoute("/api/public/hooks/refresh-recruiters")({
           "You track campus recruitment for Indian B.Tech students (CSE, IT, AIML, Data Science).",
           `List up to ${MAX_NEW} real companies actively hiring freshers or running campus/off-campus drives that are NOT already in this list:`,
           known.join(", ") || "(empty)",
-          "Only include real companies with genuine fresher hiring. For each give: company, role title, hiring_status, hiring_window (e.g. 'Aug-Oct 2026'), eligible branches (from CSE, IT, AIML, DS), required skills (5-8 short tags), project_expectations (what kind of projects impress them), interview_process (rounds), ctc_range (INR), eligibility (CGPA/backlog rules), the official careers URL, current_stage (what stage the live drive is at RIGHT NOW, e.g. 'Online assessment invites rolling out'), apply_by (application deadline), and process_stages (ordered array of 4-6 selection stages).",
-          'Reply as JSON: {"recruiters":[{"company":"","role":"","hiring_status":"","hiring_window":"","branches":[""],"skills":[""],"project_expectations":"","interview_process":"","ctc_range":"","eligibility":"","url":"","current_stage":"","apply_by":"","process_stages":[""]}]}',
+          "Only include real companies with genuine fresher hiring. For each give: company, role title, hiring_status, hiring_window (e.g. 'Aug-Oct 2026'), eligible branches (from CSE, IT, AIML, DS), required skills (5-8 short tags), project_expectations (what kind of projects impress them), interview_process (rounds), ctc_range (INR), eligibility (CGPA/backlog rules), and the official careers URL.",
+          'Reply as JSON: {"recruiters":[{"company":"","role":"","hiring_status":"","hiring_window":"","branches":[""],"skills":[""],"project_expectations":"","interview_process":"","ctc_range":"","eligibility":"","url":""}]}',
         ].join("\n\n");
 
         let response: Response;
@@ -146,12 +143,6 @@ export const Route = createFileRoute("/api/public/hooks/refresh-recruiters")({
             ctc_range: str(r.ctc_range, 120),
             eligibility: str(r.eligibility, 300),
             url: typeof r.url === "string" && r.url.startsWith("https://") ? r.url : null,
-            current_stage: str(r.current_stage, 200),
-            apply_by: str(r.apply_by, 80),
-            process_stages: (Array.isArray(r.process_stages) ? r.process_stages : [])
-              .filter((s) => typeof s === "string")
-              .slice(0, 8)
-              .map((s) => s.slice(0, 160)),
           }));
 
         if (rows.length > 0) {
