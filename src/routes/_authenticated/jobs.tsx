@@ -144,39 +144,6 @@ function RecruiterCard({ recruiter: r, isNew }: { recruiter: RecruiterRow; isNew
         </div>
       </div>
 
-      {(r.current_stage || r.apply_by) && (
-        <div className="mt-4 rounded-sm border border-primary/20 bg-primary/5 p-3">
-          {r.current_stage && (
-            <p className="text-sm leading-relaxed text-foreground/90">
-              <span className="mr-2 font-mono text-[10px] uppercase tracking-widest text-primary">
-                Live now
-              </span>
-              {r.current_stage}
-            </p>
-          )}
-          {r.apply_by && (
-            <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              Apply by: {r.apply_by}
-            </p>
-          )}
-        </div>
-      )}
-
-      {r.process_stages.length > 0 && (
-        <ol className="mt-4 flex flex-wrap items-center gap-1.5">
-          {r.process_stages.map((s, i) => (
-            <li key={s} className="flex items-center gap-1.5">
-              <span className="rounded-sm border border-border bg-secondary px-2 py-0.5 text-[11px] text-foreground/80">
-                {i + 1}. {s}
-              </span>
-              {i < r.process_stages.length - 1 && (
-                <span className="font-mono text-[10px] text-muted-foreground">→</span>
-              )}
-            </li>
-          ))}
-        </ol>
-      )}
-
       <div className="mt-4 flex flex-wrap gap-1.5">
         {r.branches.map((b) => (
           <span
