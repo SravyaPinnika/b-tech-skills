@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { BRANCHES, skillsForBranch, type Branch } from "@/data/skills";
 import { SkillCard } from "@/components/SkillCard";
+import { AuthButton } from "@/components/AuthButton";
 
 export const Route = createFileRoute("/")({
   head: () => ({
