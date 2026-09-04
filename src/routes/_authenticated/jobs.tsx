@@ -62,6 +62,7 @@ function JobsPage() {
                 Auto-updated weekly
               </span>
             </div>
+            <AuthButton />
           </div>
         </div>
       </header>
