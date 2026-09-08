@@ -5,6 +5,8 @@ import { AuthButton } from "@/components/AuthButton";
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/dashboard", label: "Dashboard" },
+  { to: "/courses", label: "Courses" },
+  { to: "/interview-prep", label: "Interview Prep" },
   { to: "/profile", label: "Profile" },
   { to: "/jobs", label: "Jobs" },
   { to: "/tools", label: "Tools" },
