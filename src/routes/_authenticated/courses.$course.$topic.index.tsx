@@ -12,7 +12,7 @@ import { codingTestKind } from "@/lib/learning.functions";
 import { ConceptPanel } from "@/components/ConceptPanel";
 import { Badge } from "./courses.index";
 
-export const Route = createFileRoute("/_authenticated/courses/$course/$topic")({
+export const Route = createFileRoute("/_authenticated/courses/$course/$topic/")({
   head: ({ params }) => {
     const course = COURSE_MAP[params.course];
     const topic = course?.topics.find((t) => t.slug === params.topic);
