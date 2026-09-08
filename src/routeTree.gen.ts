@@ -24,6 +24,7 @@ import { Route as AuthenticatedCoursesCourseIndexRouteImport } from './routes/_a
 import { Route as AuthenticatedCoursesCourseTopicRouteImport } from './routes/_authenticated/courses.$course.$topic'
 import { Route as ApiPublicHooksRefreshRecruitersRouteImport } from './routes/api/public/hooks/refresh-recruiters'
 import { Route as ApiPublicHooksRefreshToolsRouteImport } from './routes/api/public/hooks/refresh-tools'
+import { Route as AuthenticatedCoursesCourseTopicExamRouteImport } from './routes/_authenticated/courses.$course.$topic.exam'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -105,6 +106,12 @@ const ApiPublicHooksRefreshToolsRoute =
     path: '/api/public/hooks/refresh-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedCoursesCourseTopicExamRoute =
+  AuthenticatedCoursesCourseTopicExamRouteImport.update({
+    id: '/exam',
+    path: '/exam',
+    getParentRoute: () => AuthenticatedCoursesCourseTopicRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -117,10 +124,11 @@ export interface FileRoutesByFullPath {
   '/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/courses/': typeof AuthenticatedCoursesIndexRoute
-  '/courses/$course/$topic': typeof AuthenticatedCoursesCourseTopicRoute
+  '/courses/$course/$topic': typeof AuthenticatedCoursesCourseTopicRouteWithChildren
   '/api/public/hooks/refresh-recruiters': typeof ApiPublicHooksRefreshRecruitersRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
   '/courses/$course/': typeof AuthenticatedCoursesCourseIndexRoute
+  '/courses/$course/$topic/exam': typeof AuthenticatedCoursesCourseTopicExamRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -133,10 +141,11 @@ export interface FileRoutesByTo {
   '/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/courses': typeof AuthenticatedCoursesIndexRoute
-  '/courses/$course/$topic': typeof AuthenticatedCoursesCourseTopicRoute
+  '/courses/$course/$topic': typeof AuthenticatedCoursesCourseTopicRouteWithChildren
   '/api/public/hooks/refresh-recruiters': typeof ApiPublicHooksRefreshRecruitersRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
   '/courses/$course': typeof AuthenticatedCoursesCourseIndexRoute
+  '/courses/$course/$topic/exam': typeof AuthenticatedCoursesCourseTopicExamRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -151,10 +160,11 @@ export interface FileRoutesById {
   '/_authenticated/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/_authenticated/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/_authenticated/courses/': typeof AuthenticatedCoursesIndexRoute
-  '/_authenticated/courses/$course/$topic': typeof AuthenticatedCoursesCourseTopicRoute
+  '/_authenticated/courses/$course/$topic': typeof AuthenticatedCoursesCourseTopicRouteWithChildren
   '/api/public/hooks/refresh-recruiters': typeof ApiPublicHooksRefreshRecruitersRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
   '/_authenticated/courses/$course/': typeof AuthenticatedCoursesCourseIndexRoute
+  '/_authenticated/courses/$course/$topic/exam': typeof AuthenticatedCoursesCourseTopicExamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/refresh-recruiters'
     | '/api/public/hooks/refresh-tools'
     | '/courses/$course/'
+    | '/courses/$course/$topic/exam'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/refresh-recruiters'
     | '/api/public/hooks/refresh-tools'
     | '/courses/$course'
+    | '/courses/$course/$topic/exam'
   id:
     | '__root__'
     | '/'
@@ -206,6 +218,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/refresh-recruiters'
     | '/api/public/hooks/refresh-tools'
     | '/_authenticated/courses/$course/'
+    | '/_authenticated/courses/$course/$topic/exam'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -323,8 +336,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksRefreshToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/courses/$course/$topic/exam': {
+      id: '/_authenticated/courses/$course/$topic/exam'
+      path: '/exam'
+      fullPath: '/courses/$course/$topic/exam'
+      preLoaderRoute: typeof AuthenticatedCoursesCourseTopicExamRouteImport
+      parentRoute: typeof AuthenticatedCoursesCourseTopicRoute
+    }
   }
 }
+
+interface AuthenticatedCoursesCourseTopicRouteChildren {
+  AuthenticatedCoursesCourseTopicExamRoute: typeof AuthenticatedCoursesCourseTopicExamRoute
+}
+
+const AuthenticatedCoursesCourseTopicRouteChildren: AuthenticatedCoursesCourseTopicRouteChildren =
+  {
+    AuthenticatedCoursesCourseTopicExamRoute:
+      AuthenticatedCoursesCourseTopicExamRoute,
+  }
+
+const AuthenticatedCoursesCourseTopicRouteWithChildren =
+  AuthenticatedCoursesCourseTopicRoute._addFileChildren(
+    AuthenticatedCoursesCourseTopicRouteChildren,
+  )
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
@@ -335,7 +370,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDsaTopicRoute: typeof AuthenticatedDsaTopicRoute
   AuthenticatedSkillsSlugRoute: typeof AuthenticatedSkillsSlugRoute
   AuthenticatedCoursesIndexRoute: typeof AuthenticatedCoursesIndexRoute
-  AuthenticatedCoursesCourseTopicRoute: typeof AuthenticatedCoursesCourseTopicRoute
+  AuthenticatedCoursesCourseTopicRoute: typeof AuthenticatedCoursesCourseTopicRouteWithChildren
   AuthenticatedCoursesCourseIndexRoute: typeof AuthenticatedCoursesCourseIndexRoute
 }
 
@@ -348,7 +383,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDsaTopicRoute: AuthenticatedDsaTopicRoute,
   AuthenticatedSkillsSlugRoute: AuthenticatedSkillsSlugRoute,
   AuthenticatedCoursesIndexRoute: AuthenticatedCoursesIndexRoute,
-  AuthenticatedCoursesCourseTopicRoute: AuthenticatedCoursesCourseTopicRoute,
+  AuthenticatedCoursesCourseTopicRoute:
+    AuthenticatedCoursesCourseTopicRouteWithChildren,
   AuthenticatedCoursesCourseIndexRoute: AuthenticatedCoursesCourseIndexRoute,
 }
 

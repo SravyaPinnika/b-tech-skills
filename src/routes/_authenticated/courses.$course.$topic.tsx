@@ -8,6 +8,8 @@ import {
   useCurriculumProgress,
 } from "@/lib/curriculum-progress";
 import { topicGuide } from "@/lib/topic-template";
+import { codingTestKind } from "@/lib/learning.functions";
+import { ConceptPanel } from "@/components/ConceptPanel";
 import { Badge } from "./courses.index";
 
 export const Route = createFileRoute("/_authenticated/courses/$course/$topic")({
@@ -120,35 +122,43 @@ function TopicPage() {
         </Section>
 
         <Section title={`Concepts to cover (${topic.subtopics.length})`}>
+          <p className="mb-3 text-xs text-muted-foreground">
+            Tap <span className="font-mono text-primary">Learn</span> on any concept for a full
+            lesson, then tick it when you can explain it yourself.
+          </p>
           <ul className="space-y-1.5">
             {topic.subtopics.map((sub, i) => {
               const k = subKey(course.slug, topic.slug, i);
-              const done = state.done.includes(k);
               return (
-                <li key={k}>
-                  <button
-                    onClick={() => toggleSub(k)}
-                    className="flex w-full items-center gap-3 rounded-sm border border-border bg-card px-3 py-2.5 text-left transition-colors hover:border-primary/40"
-                  >
-                    <span
-                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border text-[9px] ${
-                        done
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border"
-                      }`}
-                    >
-                      {done ? "✓" : ""}
-                    </span>
-                    <span
-                      className={`text-sm ${done ? "text-muted-foreground line-through" : "font-medium"}`}
-                    >
-                      {sub}
-                    </span>
-                  </button>
-                </li>
+                <ConceptPanel
+                  key={k}
+                  course={course.slug}
+                  topic={topic.slug}
+                  index={i}
+                  title={sub}
+                  done={state.done.includes(k)}
+                  onToggle={() => toggleSub(k)}
+                />
               );
             })}
           </ul>
+        </Section>
+
+        <Section title="Test yourself">
+          <div className="flex flex-wrap items-center gap-3 rounded-sm border border-border bg-card p-4">
+            <p className="flex-1 text-sm text-muted-foreground">
+              A 10-question exam on this topic
+              {codingTestKind(course) ? " plus a timed coding / query round" : ""}. Your scores are saved
+              to your account.
+            </p>
+            <Link
+              to="/courses/$course/$topic/exam"
+              params={{ course: course.slug, topic: topic.slug }}
+              className="rounded-sm bg-primary px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-primary-foreground hover:bg-primary/90"
+            >
+              Start exam →
+            </Link>
+          </div>
         </Section>
 
         <Section title="Real-world use">
