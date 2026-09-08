@@ -102,6 +102,12 @@ function Home() {
                 >
                   Create my profile
                 </Link>
+                <Link
+                  to="/courses"
+                  className="rounded-sm border border-border px-6 py-3 text-center text-sm font-bold uppercase tracking-widest transition-colors hover:border-primary/50 hover:text-primary"
+                >
+                  Browse courses
+                </Link>
               </div>
             </div>
 
