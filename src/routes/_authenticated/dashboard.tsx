@@ -60,6 +60,22 @@ function DashboardPage() {
           </Link>
         </header>
 
+        <nav className="flex flex-wrap gap-2">
+          <Link
+            to="/courses"
+            className="rounded-sm border border-primary/40 bg-primary/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-primary hover:bg-primary/20"
+          >
+            Browse all courses
+          </Link>
+          <Link
+            to="/interview-prep"
+            className="rounded-sm border border-border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest hover:border-primary/50 hover:text-primary"
+          >
+            Interview prep
+          </Link>
+        </nav>
+
+
         <section className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
           <div className="rounded-sm border border-border bg-card p-6">
             <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
