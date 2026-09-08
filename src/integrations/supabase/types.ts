@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      concept_content: {
+        Row: {
+          content: Json
+          course_slug: string
+          created_at: string
+          id: string
+          sub_index: number
+          title: string
+          topic_slug: string
+        }
+        Insert: {
+          content: Json
+          course_slug: string
+          created_at?: string
+          id?: string
+          sub_index: number
+          title: string
+          topic_slug: string
+        }
+        Update: {
+          content?: Json
+          course_slug?: string
+          created_at?: string
+          id?: string
+          sub_index?: number
+          title?: string
+          topic_slug?: string
+        }
+        Relationships: []
+      }
+      exam_attempts: {
+        Row: {
+          course_slug: string
+          created_at: string
+          feedback: Json | null
+          id: string
+          kind: string
+          score: number
+          topic_slug: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          course_slug: string
+          created_at?: string
+          feedback?: Json | null
+          id?: string
+          kind: string
+          score: number
+          topic_slug: string
+          total: number
+          user_id: string
+        }
+        Update: {
+          course_slug?: string
+          created_at?: string
+          feedback?: Json | null
+          id?: string
+          kind?: string
+          score?: number
+          topic_slug?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       job_state: {
         Row: {
           job_name: string
@@ -134,6 +200,36 @@ export type Database = {
           name?: string
           url?: string | null
           why_it_matters?: string | null
+        }
+        Relationships: []
+      }
+      topic_exams: {
+        Row: {
+          course_slug: string
+          created_at: string
+          id: string
+          kind: string
+          language: string
+          payload: Json
+          topic_slug: string
+        }
+        Insert: {
+          course_slug: string
+          created_at?: string
+          id?: string
+          kind: string
+          language?: string
+          payload: Json
+          topic_slug: string
+        }
+        Update: {
+          course_slug?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          language?: string
+          payload?: Json
+          topic_slug?: string
         }
         Relationships: []
       }
