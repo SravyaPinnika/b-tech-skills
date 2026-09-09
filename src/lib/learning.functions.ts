@@ -318,9 +318,9 @@ export const getCodingTest = createServerFn({ method: "POST" })
         'Return JSON: {"tasks":[{"title":"","statement":"","schema":"","inputFormat":"","outputFormat":"","examples":[{"input":"","output":"","explanation":""}],"constraints":[""],"starterCode":""}]}',
       ].join("\n"),
       "You are a placement coding-round setter for first-time learners. Problems must be easy, unambiguous and solvable in 10 minutes each. Output valid JSON only.",
-
     );
-    const tasks = (gen.tasks ?? []).slice(0, 3).map((t) => ({
+    const tasks = (gen.tasks ?? []).slice(0, 6).map((t) => ({
+
       title: String(t.title ?? "Task"),
       statement: String(t.statement ?? ""),
       schema: t.schema ? String(t.schema) : undefined,
