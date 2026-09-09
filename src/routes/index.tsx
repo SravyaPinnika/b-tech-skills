@@ -221,34 +221,8 @@ function Home() {
           </div>
         </section>
 
-        <section className="mx-auto grid max-w-6xl gap-4 px-4 py-14 md:grid-cols-2">
-          <div className="rounded-sm border border-border bg-card p-6">
-            <h2 className="text-xl font-black tracking-tighter">Live hiring feed</h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              Which companies are recruiting freshers right now, the skills and projects they expect,
-              their interview rounds, CTC range and eligibility — refreshed every week.
-            </p>
-            <Link
-              to="/jobs"
-              className="mt-4 inline-block font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-            >
-              Open jobs & recruiters ↗
-            </Link>
-          </div>
-          <div className="rounded-sm border border-border bg-card p-6">
-            <h2 className="text-xl font-black tracking-tighter">Weekly tools</h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              The frameworks, libraries and platforms companies started asking about recently, tagged
-              by branch and added automatically every week.
-            </p>
-            <Link
-              to="/tools"
-              className="mt-4 inline-block font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-            >
-              Open tools feed ↗
-            </Link>
-          </div>
-        </section>
+
+
 
         <section className="border-t border-border bg-secondary/30">
           <div className="mx-auto max-w-3xl px-4 py-16 text-center">
