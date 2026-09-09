@@ -71,8 +71,8 @@ function Home() {
   const [branch, setBranch] = useState<Branch>("CSE");
   const active = BRANCHES.find((b) => b.id === branch)!;
   const skills = skillsForBranch(branch);
-  const { state, hydrated } = useSkillProgress();
-  const { rows, overall } = computeReadiness(branch, state);
+  const { state } = useSkillProgress();
+  const { rows } = computeReadiness(branch, state);
 
   return (
     <AppShell>
@@ -84,11 +84,13 @@ function Home() {
                 For B.Tech CSE · IT · AIML · Data Science
               </span>
               <h1 className="mt-3 text-4xl font-black tracking-tighter text-balance sm:text-5xl lg:text-6xl">
-                Build your skills. Track your progress. Become placement ready.
+                A structured path from B.Tech coursework to a placement offer
               </h1>
               <p className="mt-4 max-w-[52ch] text-sm leading-relaxed text-muted-foreground sm:text-base">
-                Your personalised B.Tech roadmap for skills, projects, interviews and placements.
+                Industry-aligned courses, guided practice and interview preparation for engineering
+                students.
               </p>
+
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
                   to="/dashboard"
