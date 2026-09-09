@@ -358,7 +358,7 @@ export const gradeCodingTest = createServerFn({ method: "POST" })
     topicInput
       .extend({
         language: z.string().max(20),
-        solutions: z.array(z.string().max(20_000)).max(3),
+        solutions: z.array(z.string().max(20_000)).max(6),
       })
       .parse(d),
   )
