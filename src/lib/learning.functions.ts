@@ -156,7 +156,7 @@ export const getConceptContent = createServerFn({ method: "POST" })
         "keyPoints (array of 4-6 crisp bullet points to remember)",
         "example (a concrete worked example in plain text, with numbers or a scenario)",
         codeish
-          ? `code (a short, correct code snippet — use ${course.slug === "dbms-sql" ? "SQL" : "Java"} unless the concept is language specific), codeLanguage`
+          ? `code (a short, correct code snippet — use ${course.slug === "dbms-sql" ? "SQL" : "C"} unless the concept is language specific), codeLanguage`
           : "code (omit or empty string)",
         "diagram (an ASCII diagram or table, max 12 lines, that visualises the idea; empty string if not useful)",
         "interviewTip (1-2 sentences: how interviewers ask about this and what to say)",
