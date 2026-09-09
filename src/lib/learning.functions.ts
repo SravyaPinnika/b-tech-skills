@@ -59,7 +59,7 @@ export interface AttemptRow {
   created_at: string;
 }
 
-export const CODING_LANGUAGES = ["Java", "Python", "C++", "C", "JavaScript"] as const;
+export const CODING_LANGUAGES = ["C", "C++", "Python", "JavaScript"] as const;
 
 /** Courses where a hands-on coding / query test makes sense. */
 export function codingTestKind(course: Course): "sql" | "code" | null {
