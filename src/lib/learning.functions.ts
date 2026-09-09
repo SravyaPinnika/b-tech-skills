@@ -313,11 +313,12 @@ export const getCodingTest = createServerFn({ method: "POST" })
         `Language: ${language}`,
         "",
         kind === "sql"
-          ? "Create 3 SQL query tasks (easy, medium, hard) on this topic. Each task must include a small `schema` (CREATE TABLE statements plus 4-6 sample rows as INSERTs) and the expected result described in examples."
-          : `Create 3 coding problems (easy, medium, hard) on this topic, to be solved in ${language}. Each with inputFormat, outputFormat, 2 examples with explanation, constraints, and starterCode (a function signature / main skeleton in ${language}).`,
+          ? "Create 6 SQL query tasks on this topic, ordered easiest first. Keep every task simple and beginner friendly — single table or one simple join, no window functions or CTEs unless the topic is about them. Each task must include a small `schema` (CREATE TABLE statements plus 4-6 sample rows as INSERTs) and the expected result described in examples."
+          : `Create 6 coding problems on this topic, to be solved in ${language}, ordered easiest first (4 easy, 2 medium). Keep them simple and beginner friendly: short statements, small inputs, straightforward logic solvable in under 10 minutes each. Each with inputFormat, outputFormat, 2 examples with explanation, constraints, and starterCode (a ready-to-fill skeleton in ${language} with the input reading already written).`,
         'Return JSON: {"tasks":[{"title":"","statement":"","schema":"","inputFormat":"","outputFormat":"","examples":[{"input":"","output":"","explanation":""}],"constraints":[""],"starterCode":""}]}',
       ].join("\n"),
-      "You are a placement coding-round setter. Problems must be unambiguous and solvable in 15 minutes each. Output valid JSON only.",
+      "You are a placement coding-round setter for first-time learners. Problems must be easy, unambiguous and solvable in 10 minutes each. Output valid JSON only.",
+
     );
     const tasks = (gen.tasks ?? []).slice(0, 3).map((t) => ({
       title: String(t.title ?? "Task"),
