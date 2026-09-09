@@ -112,32 +112,24 @@ function Home() {
             </div>
 
             <div className="rounded-sm border border-border bg-card p-6">
-              <div className="flex items-baseline justify-between">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Placement readiness
-                </span>
-                <span className="text-3xl font-black tracking-tighter text-primary">
-                  {hydrated ? overall : 0}%
-                </span>
-              </div>
-              <ProgressBar value={hydrated ? overall : 0} className="mt-3" />
-              <ul className="mt-5 space-y-3">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                Your learning plan
+              </span>
+              <ul className="mt-4 space-y-3">
                 {rows.slice(0, 6).map((row) => (
-                  <li key={row.skill.slug}>
-                    <div className="flex items-baseline justify-between gap-3">
-                      <span className="truncate text-xs font-semibold">{row.skill.name}</span>
-                      <span className="font-mono text-[10px] text-muted-foreground">
-                        {hydrated ? row.percent : 0}%
-                      </span>
-                    </div>
-                    <ProgressBar value={hydrated ? row.percent : 0} className="mt-1 h-1.5" />
+                  <li key={row.skill.slug} className="flex items-baseline justify-between gap-3">
+                    <span className="truncate text-xs font-semibold">{row.skill.name}</span>
+                    <span className="font-mono text-[10px] text-muted-foreground">
+                      {row.skill.weight}% weightage
+                    </span>
                   </li>
                 ))}
               </ul>
               <p className="mt-5 text-[11px] leading-relaxed text-muted-foreground">
-                This card fills up from your own tracked topics — nothing here is a demo number.
+                Weightage shows how much each skill matters in placement drives for {active.label}.
               </p>
             </div>
+
           </div>
         </section>
 
