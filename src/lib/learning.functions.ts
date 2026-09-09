@@ -291,7 +291,8 @@ export const getCodingTest = createServerFn({ method: "POST" })
     const { course, topic } = resolve(data.course, data.topic);
     const kind = codingTestKind(course);
     if (!kind) throw new Error("This course has no coding test");
-    const language = kind === "sql" ? "SQL" : data.language || "Java";
+    const language = kind === "sql" ? "SQL" : data.language || "C";
+
 
     const db = await admin();
     const { data: cached } = await db
