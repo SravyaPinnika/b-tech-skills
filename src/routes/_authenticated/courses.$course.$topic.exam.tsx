@@ -270,7 +270,7 @@ function McqExam({ course, topic }: { course: string; topic: string }) {
 
 function CodingExam({ course, topic, sql }: { course: string; topic: string; sql: boolean }) {
   const qc = useQueryClient();
-  const [language, setLanguage] = useState<string>(sql ? "SQL" : "Java");
+  const [language, setLanguage] = useState<string>(sql ? "SQL" : "C");
   const [started, setStarted] = useState(false);
   const [code, setCode] = useState<string[]>([]);
   const fetchTest = useServerFn(getCodingTest);

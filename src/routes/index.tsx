@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { BRANCHES, skillsForBranch, type Branch } from "@/data/skills";
 import { SkillCard } from "@/components/SkillCard";
-import { AppShell, ProgressBar } from "@/components/AppShell";
+import { AppShell } from "@/components/AppShell";
 import { useSkillProgress } from "@/lib/skill-progress";
 import { computeReadiness } from "@/lib/readiness";
 
@@ -71,8 +71,8 @@ function Home() {
   const [branch, setBranch] = useState<Branch>("CSE");
   const active = BRANCHES.find((b) => b.id === branch)!;
   const skills = skillsForBranch(branch);
-  const { state, hydrated } = useSkillProgress();
-  const { rows, overall } = computeReadiness(branch, state);
+  const { state } = useSkillProgress();
+  const { rows } = computeReadiness(branch, state);
 
   return (
     <AppShell>
@@ -84,11 +84,13 @@ function Home() {
                 For B.Tech CSE · IT · AIML · Data Science
               </span>
               <h1 className="mt-3 text-4xl font-black tracking-tighter text-balance sm:text-5xl lg:text-6xl">
-                Build your skills. Track your progress. Become placement ready.
+                A structured path from B.Tech coursework to a placement offer
               </h1>
               <p className="mt-4 max-w-[52ch] text-sm leading-relaxed text-muted-foreground sm:text-base">
-                Your personalised B.Tech roadmap for skills, projects, interviews and placements.
+                Industry-aligned courses, guided practice and interview preparation for engineering
+                students.
               </p>
+
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
                   to="/dashboard"
@@ -112,32 +114,24 @@ function Home() {
             </div>
 
             <div className="rounded-sm border border-border bg-card p-6">
-              <div className="flex items-baseline justify-between">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Placement readiness
-                </span>
-                <span className="text-3xl font-black tracking-tighter text-primary">
-                  {hydrated ? overall : 0}%
-                </span>
-              </div>
-              <ProgressBar value={hydrated ? overall : 0} className="mt-3" />
-              <ul className="mt-5 space-y-3">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                Your learning plan
+              </span>
+              <ul className="mt-4 space-y-3">
                 {rows.slice(0, 6).map((row) => (
-                  <li key={row.skill.slug}>
-                    <div className="flex items-baseline justify-between gap-3">
-                      <span className="truncate text-xs font-semibold">{row.skill.name}</span>
-                      <span className="font-mono text-[10px] text-muted-foreground">
-                        {hydrated ? row.percent : 0}%
-                      </span>
-                    </div>
-                    <ProgressBar value={hydrated ? row.percent : 0} className="mt-1 h-1.5" />
+                  <li key={row.skill.slug} className="flex items-baseline justify-between gap-3">
+                    <span className="truncate text-xs font-semibold">{row.skill.name}</span>
+                    <span className="font-mono text-[10px] text-muted-foreground">
+                      {row.skill.weight}% weightage
+                    </span>
                   </li>
                 ))}
               </ul>
               <p className="mt-5 text-[11px] leading-relaxed text-muted-foreground">
-                This card fills up from your own tracked topics — nothing here is a demo number.
+                Weightage shows how much each skill matters in placement drives for {active.label}.
               </p>
             </div>
+
           </div>
         </section>
 
@@ -229,34 +223,8 @@ function Home() {
           </div>
         </section>
 
-        <section className="mx-auto grid max-w-6xl gap-4 px-4 py-14 md:grid-cols-2">
-          <div className="rounded-sm border border-border bg-card p-6">
-            <h2 className="text-xl font-black tracking-tighter">Live hiring feed</h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              Which companies are recruiting freshers right now, the skills and projects they expect,
-              their interview rounds, CTC range and eligibility — refreshed every week.
-            </p>
-            <Link
-              to="/jobs"
-              className="mt-4 inline-block font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-            >
-              Open jobs & recruiters ↗
-            </Link>
-          </div>
-          <div className="rounded-sm border border-border bg-card p-6">
-            <h2 className="text-xl font-black tracking-tighter">Weekly tools</h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              The frameworks, libraries and platforms companies started asking about recently, tagged
-              by branch and added automatically every week.
-            </p>
-            <Link
-              to="/tools"
-              className="mt-4 inline-block font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-            >
-              Open tools feed ↗
-            </Link>
-          </div>
-        </section>
+
+
 
         <section className="border-t border-border bg-secondary/30">
           <div className="mx-auto max-w-3xl px-4 py-16 text-center">

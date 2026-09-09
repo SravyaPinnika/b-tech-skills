@@ -59,7 +59,7 @@ export interface AttemptRow {
   created_at: string;
 }
 
-export const CODING_LANGUAGES = ["Java", "Python", "C++", "C", "JavaScript"] as const;
+export const CODING_LANGUAGES = ["C", "C++", "Python", "JavaScript"] as const;
 
 /** Courses where a hands-on coding / query test makes sense. */
 export function codingTestKind(course: Course): "sql" | "code" | null {
@@ -156,7 +156,7 @@ export const getConceptContent = createServerFn({ method: "POST" })
         "keyPoints (array of 4-6 crisp bullet points to remember)",
         "example (a concrete worked example in plain text, with numbers or a scenario)",
         codeish
-          ? `code (a short, correct code snippet — use ${course.slug === "dbms-sql" ? "SQL" : "Java"} unless the concept is language specific), codeLanguage`
+          ? `code (a short, correct code snippet — use ${course.slug === "dbms-sql" ? "SQL" : "C"} unless the concept is language specific), codeLanguage`
           : "code (omit or empty string)",
         "diagram (an ASCII diagram or table, max 12 lines, that visualises the idea; empty string if not useful)",
         "interviewTip (1-2 sentences: how interviewers ask about this and what to say)",
@@ -291,7 +291,8 @@ export const getCodingTest = createServerFn({ method: "POST" })
     const { course, topic } = resolve(data.course, data.topic);
     const kind = codingTestKind(course);
     if (!kind) throw new Error("This course has no coding test");
-    const language = kind === "sql" ? "SQL" : data.language || "Java";
+    const language = kind === "sql" ? "SQL" : data.language || "C";
+
 
     const db = await admin();
     const { data: cached } = await db
@@ -312,13 +313,14 @@ export const getCodingTest = createServerFn({ method: "POST" })
         `Language: ${language}`,
         "",
         kind === "sql"
-          ? "Create 3 SQL query tasks (easy, medium, hard) on this topic. Each task must include a small `schema` (CREATE TABLE statements plus 4-6 sample rows as INSERTs) and the expected result described in examples."
-          : `Create 3 coding problems (easy, medium, hard) on this topic, to be solved in ${language}. Each with inputFormat, outputFormat, 2 examples with explanation, constraints, and starterCode (a function signature / main skeleton in ${language}).`,
+          ? "Create 6 SQL query tasks on this topic, ordered easiest first. Keep every task simple and beginner friendly — single table or one simple join, no window functions or CTEs unless the topic is about them. Each task must include a small `schema` (CREATE TABLE statements plus 4-6 sample rows as INSERTs) and the expected result described in examples."
+          : `Create 6 coding problems on this topic, to be solved in ${language}, ordered easiest first (4 easy, 2 medium). Keep them simple and beginner friendly: short statements, small inputs, straightforward logic solvable in under 10 minutes each. Each with inputFormat, outputFormat, 2 examples with explanation, constraints, and starterCode (a ready-to-fill skeleton in ${language} with the input reading already written).`,
         'Return JSON: {"tasks":[{"title":"","statement":"","schema":"","inputFormat":"","outputFormat":"","examples":[{"input":"","output":"","explanation":""}],"constraints":[""],"starterCode":""}]}',
       ].join("\n"),
-      "You are a placement coding-round setter. Problems must be unambiguous and solvable in 15 minutes each. Output valid JSON only.",
+      "You are a placement coding-round setter for first-time learners. Problems must be easy, unambiguous and solvable in 10 minutes each. Output valid JSON only.",
     );
-    const tasks = (gen.tasks ?? []).slice(0, 3).map((t) => ({
+    const tasks = (gen.tasks ?? []).slice(0, 6).map((t) => ({
+
       title: String(t.title ?? "Task"),
       statement: String(t.statement ?? ""),
       schema: t.schema ? String(t.schema) : undefined,
@@ -356,7 +358,7 @@ export const gradeCodingTest = createServerFn({ method: "POST" })
     topicInput
       .extend({
         language: z.string().max(20),
-        solutions: z.array(z.string().max(20_000)).max(3),
+        solutions: z.array(z.string().max(20_000)).max(6),
       })
       .parse(d),
   )
@@ -364,7 +366,7 @@ export const gradeCodingTest = createServerFn({ method: "POST" })
     const { course, topic } = resolve(data.course, data.topic);
     const kind = codingTestKind(course);
     if (!kind) throw new Error("This course has no coding test");
-    const language = kind === "sql" ? "SQL" : data.language || "Java";
+    const language = kind === "sql" ? "SQL" : data.language || "C";
 
     const db = await admin();
     const { data: cached } = await db
