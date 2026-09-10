@@ -76,7 +76,7 @@ function Home() {
     <AppShell>
       <main>
         <section className="border-b border-border">
-          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:py-20 lg:grid-cols-[1.15fr_1fr] lg:items-center">
+          <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
             <div className="rise">
               <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
                 For B.Tech CSE · IT · AIML · Data Science
