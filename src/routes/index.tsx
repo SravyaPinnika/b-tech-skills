@@ -4,7 +4,6 @@ import { BRANCHES, skillsForBranch, type Branch } from "@/data/skills";
 import { SkillCard } from "@/components/SkillCard";
 import { AppShell } from "@/components/AppShell";
 import { useSkillProgress } from "@/lib/skill-progress";
-import { computeReadiness } from "@/lib/readiness";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -72,13 +71,12 @@ function Home() {
   const active = BRANCHES.find((b) => b.id === branch)!;
   const skills = skillsForBranch(branch);
   const { state } = useSkillProgress();
-  const { rows } = computeReadiness(branch, state);
 
   return (
     <AppShell>
       <main>
         <section className="border-b border-border">
-          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:py-20 lg:grid-cols-[1.15fr_1fr] lg:items-center">
+          <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
             <div className="rise">
               <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
                 For B.Tech CSE · IT · AIML · Data Science
@@ -110,26 +108,6 @@ function Home() {
                 </Link>
               </div>
             </div>
-
-            <div className="rounded-sm border border-border bg-card p-6">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                Your learning plan
-              </span>
-              <ul className="mt-4 space-y-3">
-                {rows.slice(0, 6).map((row) => (
-                  <li key={row.skill.slug} className="flex items-baseline justify-between gap-3">
-                    <span className="truncate text-xs font-semibold">{row.skill.name}</span>
-                    <span className="font-mono text-[10px] text-muted-foreground">
-                      {row.skill.weight}% weightage
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-5 text-[11px] leading-relaxed text-muted-foreground">
-                Weightage shows how much each skill matters in placement drives for {active.label}.
-              </p>
-            </div>
-
           </div>
         </section>
 
