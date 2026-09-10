@@ -82,7 +82,7 @@ function Home() {
                 For B.Tech CSE · IT · AIML · Data Science
               </span>
               <h1 className="mt-3 text-4xl font-black tracking-tighter text-balance sm:text-5xl lg:text-6xl">
-                B.tech  skills  &   career  hub
+                B.tech  skills  &   career  hub
               </h1>
               <p className="mt-4 max-w-[52ch] text-sm leading-relaxed text-muted-foreground sm:text-base">
               </p>
@@ -107,40 +107,6 @@ function Home() {
                   Browse courses
                 </Link>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-6xl px-4 py-14">
-          <h2 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-            What you get
-          </h2>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {PILLARS.map((p) => (
-              <div
-                key={p.title}
-                className="rounded-sm border border-border bg-card p-5 transition-colors hover:border-primary/40"
-              >
-                <h3 className="text-sm font-bold tracking-tight">{p.title}</h3>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{p.body}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="border-y border-border bg-secondary/30">
-          <div className="mx-auto max-w-6xl px-4 py-14">
-            <h2 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-              How it works
-            </h2>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {STEPS.map((s) => (
-                <div key={s.n} className="rounded-sm border border-border bg-card p-5">
-                  <span className="font-mono text-xs font-bold text-primary">{s.n}</span>
-                  <h3 className="mt-2 text-sm font-bold tracking-tight">{s.title}</h3>
-                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{s.body}</p>
-                </div>
-              ))}
             </div>
           </div>
         </section>
@@ -199,8 +165,39 @@ function Home() {
           </div>
         </section>
 
+        <section className="mx-auto max-w-6xl px-4 py-14">
+          <h2 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+            What you get
+          </h2>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {PILLARS.map((p) => (
+              <div
+                key={p.title}
+                className="rounded-sm border border-border bg-card p-5 transition-colors hover:border-primary/40"
+              >
+                <h3 className="text-sm font-bold tracking-tight">{p.title}</h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{p.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-
+        <section className="border-y border-border bg-secondary/30">
+          <div className="mx-auto max-w-6xl px-4 py-14">
+            <h2 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+              How it works
+            </h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {STEPS.map((s) => (
+                <div key={s.n} className="rounded-sm border border-border bg-card p-5">
+                  <span className="font-mono text-xs font-bold text-primary">{s.n}</span>
+                  <h3 className="mt-2 text-sm font-bold tracking-tight">{s.title}</h3>
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{s.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         <section className="border-t border-border bg-secondary/30">
           <div className="mx-auto max-w-3xl px-4 py-16 text-center">
