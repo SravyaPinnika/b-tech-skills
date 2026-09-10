@@ -306,7 +306,7 @@ export const SKILLS: Skill[] = [
   },
   {
     slug: "web-development",
-    name: "Web Development",
+    name: "web development",
     tagline: "Ship something people can open.",
     weight: 76,
     branches: ["CSE", "IT"],
