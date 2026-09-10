@@ -4,7 +4,6 @@ import { BRANCHES, skillsForBranch, type Branch } from "@/data/skills";
 import { SkillCard } from "@/components/SkillCard";
 import { AppShell } from "@/components/AppShell";
 import { useSkillProgress } from "@/lib/skill-progress";
-import { computeReadiness } from "@/lib/readiness";
 
 export const Route = createFileRoute("/")({
   head: () => ({
