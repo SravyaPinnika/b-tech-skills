@@ -71,7 +71,6 @@ function Home() {
   const active = BRANCHES.find((b) => b.id === branch)!;
   const skills = skillsForBranch(branch);
   const { state } = useSkillProgress();
-  const { rows } = computeReadiness(branch, state);
 
   return (
     <AppShell>
