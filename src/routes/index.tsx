@@ -108,26 +108,6 @@ function Home() {
                 </Link>
               </div>
             </div>
-
-            <div className="rounded-sm border border-border bg-card p-6">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                Your learning plan
-              </span>
-              <ul className="mt-4 space-y-3">
-                {rows.slice(0, 6).map((row) => (
-                  <li key={row.skill.slug} className="flex items-baseline justify-between gap-3">
-                    <span className="truncate text-xs font-semibold">{row.skill.name}</span>
-                    <span className="font-mono text-[10px] text-muted-foreground">
-                      {row.skill.weight}% weightage
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-5 text-[11px] leading-relaxed text-muted-foreground">
-                Weightage shows how much each skill matters in placement drives for {active.label}.
-              </p>
-            </div>
-
           </div>
         </section>
 
