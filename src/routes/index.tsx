@@ -84,11 +84,9 @@ function Home() {
                 For B.Tech CSE · IT · AIML · Data Science
               </span>
               <h1 className="mt-3 text-4xl font-black tracking-tighter text-balance sm:text-5xl lg:text-6xl">
-                A structured path from B.Tech coursework to a placement offer
+                B.tech  skills  &   career  hub
               </h1>
               <p className="mt-4 max-w-[52ch] text-sm leading-relaxed text-muted-foreground sm:text-base">
-                Industry-aligned courses, guided practice and interview preparation for engineering
-                students.
               </p>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
