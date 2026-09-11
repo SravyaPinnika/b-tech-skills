@@ -1,48 +1,35 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
-import {
-  LANGUAGES,
-  PROFILE_BRANCHES,
-  TARGET_ROLES,
-  YEARS,
-  useProfile,
-  type ProfileBranch,
-  type StudentProfile,
-  type TargetRole,
-  type Year,
-} from "@/lib/profile";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { BRANCHES, branchInfo, YEARS, semestersForYear } from "@/data/branches";
+import { getMyProfile, saveMyProfile } from "@/lib/profile.functions";
 
 const SKILL_TAGS = [
   "Problem solving",
   "DSA basics",
   "OOP",
   "SQL queries",
-  "HTML/CSS",
-  "React",
-  "Node/Express",
+  "Web development",
   "Git & GitHub",
   "Linux",
-  "Pandas / NumPy",
+  "Python",
   "Machine learning",
   "Cloud basics",
+  "CAD / simulation",
+  "Aptitude",
 ];
 
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
     meta: [
-      { title: "Create Your Student Profile — B.Tech Skills" },
-      {
-        name: "description",
-        content:
-          "Tell us your branch, year, known languages and target role so your learning roadmap and placement readiness are personalised to you.",
-      },
-      { property: "og:title", content: "Create Your Student Profile — B.Tech Skills" },
-      {
-        property: "og:description",
-        content:
-          "Set your branch, year, target job role and weekly study time to unlock a personalised B.Tech placement roadmap.",
-      },
+      { title: "Student Profile & Career Goal | B.Tech Skills" },
+      { name: "description", content: "Save your B.Tech branch, semester, skills and career goal for a personalised learning roadmap." },
+      { property: "og:title", content: "Student Profile — B.Tech Skills" },
+      { property: "og:description", content: "Build a personalised B.Tech learning and placement plan from your current profile." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -52,125 +39,117 @@ export const Route = createFileRoute("/_authenticated/profile")({
 
 function ProfilePage() {
   const navigate = useNavigate();
-  const { profile, hydrated, save } = useProfile();
-
+  const loadProfile = useServerFn(getMyProfile);
+  const saveProfile = useServerFn(saveMyProfile);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const [name, setName] = useState("");
-  const [branch, setBranch] = useState<ProfileBranch>("CSE");
-  const [year, setYear] = useState<Year>("2nd Year");
-  const [role, setRole] = useState<TargetRole>("Software Developer");
+  const [branch, setBranch] = useState("cse");
+  const [year, setYear] = useState(2);
+  const [semester, setSemester] = useState(3);
+  const [careerGoal, setCareerGoal] = useState("");
+  const [targetJob, setTargetJob] = useState("");
   const [languages, setLanguages] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
   const [hours, setHours] = useState(10);
 
   useEffect(() => {
-    if (!profile) return;
-    setName(profile.name);
-    setBranch(profile.branch);
-    setYear(profile.year);
-    setRole(profile.targetRole);
-    setLanguages(profile.languages);
-    setSkills(profile.skills);
-    setHours(profile.weeklyHours);
-  }, [profile]);
+    let active = true;
+    loadProfile()
+      .then((profile) => {
+        if (!active || !profile) return;
+        setName(profile.name);
+        setBranch(profile.branch);
+        setYear(profile.year);
+        setSemester(profile.semester);
+        setCareerGoal(profile.career_goal);
+        setTargetJob(profile.target_job);
+        setLanguages(profile.languages);
+        setSkills(profile.skills);
+        setHours(profile.weekly_hours);
+      })
+      .catch((cause) => active && setError(cause instanceof Error ? cause.message : "Your profile could not be loaded."))
+      .finally(() => active && setLoading(false));
+    return () => {
+      active = false;
+    };
+  }, [loadProfile]);
 
-  function toggle(list: string[], value: string, set: (v: string[]) => void) {
-    set(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
+  const selectedBranch = branchInfo(branch);
+  const validSemesters = semestersForYear(year);
+
+  function toggle(list: string[], value: string, set: (values: string[]) => void) {
+    set(list.includes(value) ? list.filter((item) => item !== value) : [...list, value]);
   }
 
-  function submit(e: React.FormEvent) {
-    e.preventDefault();
-    const next: StudentProfile = {
-      name: name.trim() || "Student",
-      branch,
-      year,
-      languages,
-      skills,
-      targetRole: role,
-      weeklyHours: hours,
-      createdAt: profile?.createdAt ?? new Date().toISOString(),
-    };
-    save(next);
-    navigate({ to: "/dashboard" });
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    setSaving(true);
+    setError("");
+    try {
+      await saveProfile({
+        data: {
+          name: name.trim() || "Student",
+          branch,
+          year,
+          semester,
+          career_goal: careerGoal.trim(),
+          target_job: targetJob.trim(),
+          languages,
+          skills,
+          weekly_hours: hours,
+        },
+      });
+      await navigate({ to: "/roadmap" });
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Your profile could not be saved.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) {
+    return <AppShell><main className="mx-auto max-w-3xl px-4 py-16 text-sm text-muted-foreground">Loading your profile…</main></AppShell>;
   }
 
   return (
     <AppShell>
-      <main className="mx-auto max-w-3xl space-y-8 px-4 py-8 sm:py-12">
-        <header>
-          <h1 className="text-3xl font-black tracking-tighter sm:text-4xl">
-            {profile ? "Edit your profile" : "Create your profile"}
-          </h1>
-          <p className="mt-2 max-w-[52ch] text-sm text-muted-foreground">
-            Seven quick answers. Everything after this — your roadmap, dashboard and what to learn
-            next — is built from them.
-          </p>
+      <main className="mx-auto max-w-4xl space-y-8 px-4 py-8 sm:py-12">
+        <header className="border-b border-border pb-5">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-primary">Personalisation</p>
+          <h1 className="mt-2 text-3xl font-black sm:text-4xl">Your student profile</h1>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">Your saved profile shapes your semester roadmap, projects, practice and interview preparation on every device.</p>
         </header>
 
         <form onSubmit={submit} className="space-y-8">
-          <Field label="Your name">
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Dhanush"
-              className="w-full rounded-sm border border-border bg-card px-3 py-2 text-sm outline-none focus:border-primary"
-            />
-          </Field>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field label="Your name"><Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" maxLength={80} /></Field>
+            <Field label="Weekly study time"><div className="flex h-9 items-center gap-4"><input type="range" min={1} max={40} value={hours} onChange={(e) => setHours(Number(e.target.value))} className="w-full accent-primary" /><span className="w-16 text-right text-sm font-bold">{hours} hrs</span></div></Field>
+          </div>
 
           <Field label="B.Tech branch">
-            <Chips
-              options={[...PROFILE_BRANCHES]}
-              selected={[branch]}
-              onSelect={(v) => setBranch(v as ProfileBranch)}
-            />
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {BRANCHES.map((option) => <Choice key={option.id} active={branch === option.id} onClick={() => { setBranch(option.id); setCareerGoal(""); setTargetJob(""); setLanguages([]); }}>{option.label}</Choice>)}
+            </div>
           </Field>
 
-          <Field label="Current year">
-            <Chips options={[...YEARS]} selected={[year]} onSelect={(v) => setYear(v as Year)} />
-          </Field>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field label="Current year"><div className="grid grid-cols-4 gap-2">{YEARS.map((value) => <Choice key={value} active={year === value} onClick={() => { setYear(value); setSemester(semestersForYear(value)[0] ?? 1); }}>{value}</Choice>)}</div></Field>
+            <Field label="Current semester"><div className="grid grid-cols-2 gap-2">{validSemesters.map((value) => <Choice key={value} active={semester === value} onClick={() => setSemester(value)}>Semester {value}</Choice>)}</div></Field>
+          </div>
 
-          <Field label="Target job role">
-            <Chips
-              options={[...TARGET_ROLES]}
-              selected={[role]}
-              onSelect={(v) => setRole(v as TargetRole)}
-            />
-          </Field>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field label="Career goal"><select value={careerGoal} onChange={(e) => setCareerGoal(e.target.value)} className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"><option value="">Choose a goal</option>{selectedBranch.careerGoals.map((goal) => <option key={goal}>{goal}</option>)}</select></Field>
+            <Field label="Target job"><select value={targetJob} onChange={(e) => setTargetJob(e.target.value)} className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"><option value="">Choose a target job</option>{selectedBranch.targetJobs.map((job) => <option key={job}>{job}</option>)}</select></Field>
+          </div>
 
-          <Field label="Programming languages you know">
-            <Chips
-              options={[...LANGUAGES]}
-              selected={languages}
-              onSelect={(v) => toggle(languages, v, setLanguages)}
-            />
-          </Field>
+          <Field label="Languages and tools you know"><div className="flex flex-wrap gap-2">{selectedBranch.languages.map((item) => <Choice key={item} active={languages.includes(item)} onClick={() => toggle(languages, item, setLanguages)}>{item}</Choice>)}</div></Field>
+          <Field label="Current skills"><div className="flex flex-wrap gap-2">{[...new Set([...selectedBranch.skills, ...SKILL_TAGS])].map((item) => <Choice key={item} active={skills.includes(item)} onClick={() => toggle(skills, item, setSkills)}>{item}</Choice>)}</div></Field>
+          <Field label="Anything else about your goal"><Textarea value={careerGoal} onChange={(e) => setCareerGoal(e.target.value)} placeholder="Choose a goal above or describe your own goal" maxLength={120} /></Field>
 
-          <Field label="Skills you already have">
-            <Chips
-              options={SKILL_TAGS}
-              selected={skills}
-              onSelect={(v) => toggle(skills, v, setSkills)}
-            />
-          </Field>
-
-          <Field label={`Weekly study time — ${hours} hours`}>
-            <input
-              type="range"
-              min={2}
-              max={40}
-              step={1}
-              value={hours}
-              onChange={(e) => setHours(Number(e.target.value))}
-              className="w-full accent-primary"
-            />
-          </Field>
-
-          <button
-            type="submit"
-            disabled={!hydrated}
-            className="w-full rounded-sm bg-primary px-5 py-3 text-sm font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 sm:w-auto"
-          >
-            {profile ? "Save profile" : "Build my roadmap"}
-          </button>
+          {error && <p role="alert" className="border-l-2 border-destructive pl-3 text-sm text-destructive">{error}</p>}
+          <Button type="submit" size="lg" disabled={saving}>{saving ? "Saving…" : "Save and build my roadmap"}</Button>
         </form>
       </main>
     </AppShell>
@@ -178,44 +157,9 @@ function ProfilePage() {
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="space-y-2">
-      <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-        {label}
-      </span>
-      {children}
-    </div>
-  );
+  return <label className="block space-y-2"><span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</span>{children}</label>;
 }
 
-function Chips({
-  options,
-  selected,
-  onSelect,
-}: {
-  options: string[];
-  selected: string[];
-  onSelect: (value: string) => void;
-}) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {options.map((option) => {
-        const active = selected.includes(option);
-        return (
-          <button
-            key={option}
-            type="button"
-            onClick={() => onSelect(option)}
-            className={`rounded-sm px-3 py-1.5 text-xs font-semibold transition-colors ${
-              active
-                ? "bg-foreground text-background"
-                : "bg-secondary text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {option}
-          </button>
-        );
-      })}
-    </div>
-  );
+function Choice({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return <Button type="button" variant={active ? "default" : "secondary"} size="sm" onClick={onClick} className="h-auto min-h-8 whitespace-normal">{children}</Button>;
 }
