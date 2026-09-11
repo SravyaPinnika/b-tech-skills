@@ -1,24 +1,26 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppShell, ProgressBar } from "@/components/AppShell";
-import { contentBranch, useProfile } from "@/lib/profile";
-import { useSkillProgress } from "@/lib/skill-progress";
-import { biggestGap, computeReadiness, recommendNext } from "@/lib/readiness";
-import { useLessonProgress } from "@/lib/lesson-progress";
+import { useProfile } from "@/lib/profile";
+import { COURSES } from "@/data/curriculum";
+import {
+  coursePercent,
+  overallCurriculumPercent,
+  useCurriculumProgress,
+} from "@/lib/curriculum-progress";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "My Dashboard — Placement Readiness | B.Tech Skills" },
+      { title: "My Dashboard — Course Completion | B.Tech Skills" },
       {
         name: "description",
         content:
-          "Track your placement readiness score, skill-by-skill progress, today's goal and the next topic you should learn.",
+          "See your saved student profile and the completion percentage of every course you are learning.",
       },
-      { property: "og:title", content: "My Dashboard — Placement Readiness" },
+      { property: "og:title", content: "My Dashboard — Course Completion" },
       {
         property: "og:description",
-        content:
-          "Your live placement readiness score, per-skill progress bars, weekly study stats and next recommended topic.",
+        content: "Your student profile and per-course completion percentages in one place.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -29,14 +31,9 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function DashboardPage() {
   const { profile, hydrated } = useProfile();
-  const { state, hydrated: progressReady } = useSkillProgress();
-  const { state: lessons } = useLessonProgress();
+  const { state, hydrated: progressReady } = useCurriculumProgress();
 
-  const branch = profile ? contentBranch(profile.branch) : "CSE";
-  const { rows, overall, totalTopics, completedTopics } = computeReadiness(branch, state);
-  const next = recommendNext(rows);
-  const gap = biggestGap(rows);
-  const ready = hydrated && progressReady;
+  const overall = progressReady ? overallCurriculumPercent(state) : 0;
 
   return (
     <AppShell>
@@ -47,9 +44,7 @@ function DashboardPage() {
               {profile ? `Hi ${profile.name}` : "My dashboard"}
             </h1>
             <p className="mt-1 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
-              {profile
-                ? `${profile.branch} · ${profile.year} · ${profile.targetRole} · ${profile.weeklyHours}h/week`
-                : "Create a profile to personalise this"}
+              Course completion overview
             </p>
           </div>
           <Link
@@ -60,132 +55,76 @@ function DashboardPage() {
           </Link>
         </header>
 
-        <nav className="flex flex-wrap gap-2">
-          <Link
-            to="/courses"
-            className="rounded-sm border border-primary/40 bg-primary/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-primary hover:bg-primary/20"
-          >
-            Browse all courses
-          </Link>
-          <Link
-            to="/interview-prep"
-            className="rounded-sm border border-border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest hover:border-primary/50 hover:text-primary"
-          >
-            Interview prep
-          </Link>
-        </nav>
-
-
-        <section className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
-          <div className="rounded-sm border border-border bg-card p-6">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              Placement readiness
-            </span>
-            <div className="mt-3 flex items-end gap-3">
-              <span className="text-6xl font-black tracking-tighter text-primary">
-                {ready ? overall : 0}%
-              </span>
-              <span className="pb-2 text-xs text-muted-foreground">
-                {completedTopics}/{totalTopics} topics done
-              </span>
+        <section className="rounded-sm border border-border bg-card p-6">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+            My profile
+          </span>
+          {!hydrated ? (
+            <p className="mt-3 text-sm text-muted-foreground">Loading…</p>
+          ) : profile ? (
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <Info label="Name" value={profile.name} />
+              <Info label="Branch" value={profile.branch} />
+              <Info label="Year" value={profile.year} />
+              <Info label="Target role" value={profile.targetRole} />
+              <Info label="Weekly study time" value={`${profile.weeklyHours} hours`} />
+              <Info
+                label="Languages"
+                value={profile.languages.length ? profile.languages.join(", ") : "—"}
+              />
+              <div className="sm:col-span-2 lg:col-span-3">
+                <Info
+                  label="Skills you already have"
+                  value={profile.skills.length ? profile.skills.join(", ") : "—"}
+                />
+              </div>
             </div>
-            <ProgressBar value={ready ? overall : 0} className="mt-4" />
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              {overall === 0
-                ? "Mark topics as in-progress or completed inside any skill and this score starts moving."
-                : gap
-                  ? `Your biggest gap right now is ${gap.skill.name}.`
-                  : ""}
+          ) : (
+            <p className="mt-3 text-sm text-muted-foreground">
+              You have not created a profile yet.{" "}
+              <Link to="/profile" className="text-primary hover:underline">
+                Create one
+              </Link>
+              .
             </p>
-          </div>
-
-          <div className="rounded-sm border border-border bg-card p-6">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              Skill breakdown
-            </span>
-            <ul className="mt-4 space-y-3">
-              {rows.slice(0, 8).map((row) => (
-                <li key={row.skill.slug}>
-                  <Link
-                    to="/skills/$slug"
-                    params={{ slug: row.skill.slug }}
-                    className="group block"
-                  >
-                    <div className="flex items-baseline justify-between gap-3">
-                      <span className="truncate text-sm font-semibold group-hover:text-primary">
-                        {row.skill.name}
-                      </span>
-                      <span className="font-mono text-[11px] text-muted-foreground">
-                        {ready ? row.percent : 0}%
-                      </span>
-                    </div>
-                    <ProgressBar value={ready ? row.percent : 0} className="mt-1.5 h-1.5" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          )}
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-sm border border-border bg-card p-6">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              Today's goal
-            </span>
-            <p className="mt-3 text-lg font-bold tracking-tight">
-              {next
-                ? `Work through "${next.topic.name}"`
-                : "Revise a completed skill and solve 3 problems"}
-            </p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              About {Math.max(1, Math.round((profile?.weeklyHours ?? 10) / 5))} focused hours today
-              keeps you on track.
-            </p>
-            {next && (
-              <Link
-                to="/skills/$slug"
-                params={{ slug: next.skill.slug }}
-                className="mt-4 inline-block rounded-sm bg-primary px-4 py-2 text-xs font-bold uppercase tracking-widest text-primary-foreground hover:bg-primary/90"
-              >
-                Continue learning
-              </Link>
-            )}
+        <section className="rounded-sm border border-border bg-card p-6">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+            Overall completion
+          </span>
+          <div className="mt-3 flex items-end gap-3">
+            <span className="text-6xl font-black tracking-tighter text-primary">{overall}%</span>
+            <span className="pb-2 text-xs text-muted-foreground">across all courses</span>
           </div>
-
-          <div className="rounded-sm border border-border bg-card p-6">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              Recommended next skill
-            </span>
-            <p className="mt-3 text-lg font-bold tracking-tight">
-              {next ? next.topic.name : "All caught up"}
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              {next ? next.reason : "Every tracked topic is complete — move on to mock interviews."}
-            </p>
-            {next && (
-              <Link
-                to="/skills/$slug"
-                params={{ slug: next.skill.slug }}
-                className="mt-4 inline-block font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-              >
-                Start learning ↗
-              </Link>
-            )}
-          </div>
+          <ProgressBar value={overall} className="mt-4" />
         </section>
 
         <section>
           <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-            Your progress so far
+            Course completion
           </span>
-          <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <Stat label="Topics completed" value={completedTopics} />
-            <Stat label="DSA lessons done" value={lessons.topics.length} />
-            <Stat label="Problems solved" value={lessons.problems.length} />
-            <Stat
-              label="Hours planned / week"
-              value={profile?.weeklyHours ?? 0}
-            />
+          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {COURSES.map((course) => {
+              const pct = progressReady ? coursePercent(state, course) : 0;
+              return (
+                <Link
+                  key={course.slug}
+                  to="/courses/$course"
+                  params={{ course: course.slug }}
+                  className="group rounded-sm border border-border bg-card p-4 transition-colors hover:border-primary/40"
+                >
+                  <div className="flex items-baseline justify-between gap-3">
+                    <h2 className="truncate text-sm font-bold tracking-tight group-hover:text-primary">
+                      {course.title}
+                    </h2>
+                    <span className="font-mono text-[11px] text-muted-foreground">{pct}%</span>
+                  </div>
+                  <ProgressBar value={pct} className="mt-2 h-1.5" />
+                </Link>
+              );
+            })}
           </div>
         </section>
       </main>
@@ -193,13 +132,13 @@ function DashboardPage() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: number }) {
+function Info({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-sm border border-border bg-card p-4">
-      <div className="text-3xl font-black tracking-tighter">{value}</div>
-      <div className="mt-1 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+    <div>
+      <div className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
         {label}
       </div>
+      <div className="mt-1 text-sm font-semibold">{value}</div>
     </div>
   );
 }
