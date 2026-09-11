@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      applications: {
+        Row: {
+          applied_on: string
+          company: string
+          created_at: string
+          id: string
+          kind: string
+          link: string | null
+          notes: string | null
+          role: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          applied_on?: string
+          company: string
+          created_at?: string
+          id?: string
+          kind?: string
+          link?: string | null
+          notes?: string | null
+          role?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          applied_on?: string
+          company?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          link?: string | null
+          notes?: string | null
+          role?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       concept_content: {
         Row: {
           content: Json
@@ -80,6 +122,30 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_content: {
+        Row: {
+          cache_key: string
+          created_at: string
+          id: string
+          kind: string
+          payload: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          id?: string
+          kind: string
+          payload: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          payload?: Json
+        }
+        Relationships: []
+      }
       job_state: {
         Row: {
           job_name: string
@@ -104,6 +170,48 @@ export type Database = {
           last_status?: string | null
           lease_until?: string | null
           paused?: boolean
+        }
+        Relationships: []
+      }
+      practice_attempts: {
+        Row: {
+          branch: string
+          created_at: string
+          feedback: Json | null
+          id: string
+          kind: string
+          score: number
+          seconds_taken: number
+          topic: string
+          total: number
+          user_id: string
+          weak_topics: string[]
+        }
+        Insert: {
+          branch?: string
+          created_at?: string
+          feedback?: Json | null
+          id?: string
+          kind: string
+          score?: number
+          seconds_taken?: number
+          topic?: string
+          total?: number
+          user_id: string
+          weak_topics?: string[]
+        }
+        Update: {
+          branch?: string
+          created_at?: string
+          feedback?: Json | null
+          id?: string
+          kind?: string
+          score?: number
+          seconds_taken?: number
+          topic?: string
+          total?: number
+          user_id?: string
+          weak_topics?: string[]
         }
         Relationships: []
       }
@@ -164,6 +272,51 @@ export type Database = {
           role?: string
           skills?: string[]
           url?: string | null
+        }
+        Relationships: []
+      }
+      student_profiles: {
+        Row: {
+          branch: string
+          career_goal: string
+          created_at: string
+          languages: string[]
+          name: string
+          semester: number
+          skills: string[]
+          target_job: string
+          updated_at: string
+          user_id: string
+          weekly_hours: number
+          year: number
+        }
+        Insert: {
+          branch: string
+          career_goal?: string
+          created_at?: string
+          languages?: string[]
+          name?: string
+          semester?: number
+          skills?: string[]
+          target_job?: string
+          updated_at?: string
+          user_id: string
+          weekly_hours?: number
+          year?: number
+        }
+        Update: {
+          branch?: string
+          career_goal?: string
+          created_at?: string
+          languages?: string[]
+          name?: string
+          semester?: number
+          skills?: string[]
+          target_job?: string
+          updated_at?: string
+          user_id?: string
+          weekly_hours?: number
+          year?: number
         }
         Relationships: []
       }
@@ -230,6 +383,66 @@ export type Database = {
           language?: string
           payload?: Json
           topic_slug?: string
+        }
+        Relationships: []
+      }
+      user_content: {
+        Row: {
+          cache_key: string
+          created_at: string
+          id: string
+          kind: string
+          payload: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cache_key?: string
+          created_at?: string
+          id?: string
+          kind: string
+          payload: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          payload?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          created_at: string
+          done: boolean
+          id: string
+          item_id: string
+          item_kind: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          item_id: string
+          item_kind: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          item_id?: string
+          item_kind?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
