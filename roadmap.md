@@ -1,21 +1,22 @@
 # B.Tech Skills — improvement roadmap
 
-## Phase 1 (in progress)
+## Phase 1
 - [x] Shared responsive app shell + navigation with mobile menu
 - [x] Student profile setup flow (branch, year, role, languages, study time)
-- [x] Dashboard: placement readiness, category progress, today's goal, next skill, weekly stats
+- [x] Database-backed profile with all 13 branches, year, semester, career goal and target job
+- [x] Dashboard: saved profile, personalised pathway links and per-course completion
 - [x] Homepage rebuild (hero, how it works, career goals, skills, roadmap preview, tools, CTA)
 
 ## Phase 2
-- [ ] Visual personalized roadmap page (nodes, status, difficulty, time)
+- [x] Visual personalized roadmap page (semester subjects, skills, courses, projects and placement plan)
 - [ ] Skills page + skill detail template with per-topic status marking
 - [ ] Progress tracking wired across skills
 - [ ] "What should I learn next?" recommendations
 
 ## Phase 3
 - [ ] Skill assessment (MCQ) + skill profile output + gap detection
-- [ ] Projects page (beginner/intermediate/advanced, add to roadmap)
-- [ ] Interview questions section with completion tracking
+- [x] Projects page (beginner/intermediate/advanced/final-year with build, GitHub, deployment and viva guidance)
+- [x] Interview question sets and mock answer feedback
 - [ ] Placement preparation page with tracker
 
 ## Phase 4
