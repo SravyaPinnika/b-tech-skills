@@ -1,12 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { AuthButton } from "@/components/AuthButton";
+import { Button } from "@/components/ui/button";
 
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/dashboard", label: "Dashboard" },
+  { to: "/roadmap", label: "Roadmap" },
   { to: "/courses", label: "Courses" },
-  
+  { to: "/projects", label: "Projects" },
+  { to: "/interviews", label: "Interviews" },
   { to: "/profile", label: "Profile" },
   { to: "/jobs", label: "Jobs" },
   { to: "/tools", label: "Tools" },
@@ -23,7 +26,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             B.Tech <span className="text-primary">Skills</span>
           </Link>
 
-          <nav className="hidden items-center gap-5 md:flex">
+          <nav className="hidden items-center gap-4 lg:flex">
             {NAV.map((item) => (
               <Link
                 key={item.to}
@@ -38,24 +41,26 @@ export function AppShell({ children }: { children: ReactNode }) {
           </nav>
 
           <div className="flex items-center gap-2">
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <AuthButton />
             </div>
-            <button
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => setOpen((v) => !v)}
               aria-label="Toggle menu"
               aria-expanded={open}
-              className="rounded-sm border border-border p-2 md:hidden"
+              className="lg:hidden"
             >
               <span className="block h-[2px] w-4 bg-foreground" />
               <span className="mt-1 block h-[2px] w-4 bg-foreground" />
               <span className="mt-1 block h-[2px] w-4 bg-foreground" />
-            </button>
+            </Button>
           </div>
         </div>
 
         {open && (
-          <div className="border-t border-border bg-background px-4 py-3 md:hidden">
+          <div className="border-t border-border bg-background px-4 py-3 lg:hidden">
             <nav className="flex flex-col gap-1">
               {NAV.map((item) => (
                 <Link
