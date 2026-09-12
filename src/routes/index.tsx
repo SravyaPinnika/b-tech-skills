@@ -1,9 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { BRANCHES, skillsForBranch, type Branch } from "@/data/skills";
+import { useMemo, useState } from "react";
+import { BRANCHES } from "@/data/branches";
+import {
+  coursesForBranchId,
+  skillsForBranchId,
+  type BranchSelection,
+} from "@/data/branch-catalog";
 import { SkillCard } from "@/components/SkillCard";
 import { AppShell } from "@/components/AppShell";
-import { useSkillProgress } from "@/lib/skill-progress";
 
 export const Route = createFileRoute("/")({
   head: () => ({
