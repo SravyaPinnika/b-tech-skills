@@ -67,9 +67,15 @@ const GOALS = [
 
 function Home() {
   const [branch, setBranch] = useState<BranchSelection>("all");
+  const [subjectQuery, setSubjectQuery] = useState("");
   const active = BRANCHES.find((b) => b.id === branch);
-  const skills = useMemo(() => skillsForBranchId(branch), [branch]);
-  const courses = useMemo(() => coursesForBranchId(branch), [branch]);
+
+  const q = subjectQuery.trim().toLowerCase();
+  const matchSubject = (s: BranchSubject) =>
+    !q ||
+    s.name.toLowerCase().includes(q) ||
+    s.description.toLowerCase().includes(q) ||
+    s.topics.some((t) => t.toLowerCase().includes(q));
 
   return (
     <AppShell>
