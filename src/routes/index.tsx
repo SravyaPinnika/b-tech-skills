@@ -145,64 +145,126 @@ function Home() {
               </h2>
               <p className="mt-1 max-w-[60ch] text-sm text-muted-foreground">
                 {active
-                  ? active.blurb
-                  : "All 13 B.Tech branches, with every course in the catalogue."}
+                  ? `${active.short} — main subjects below.`
+                  : "All 13 B.Tech branches. Pick one to see its main subjects."}
               </p>
             </div>
-            <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
-              Ranked by placement weightage
-            </span>
+            {active && (
+              <button
+                type="button"
+                onClick={() => {
+                  setBranch("all");
+                  setSubjectQuery("");
+                }}
+                className="rounded-sm border border-border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
+              >
+                ← Back to categories
+              </button>
+            )}
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-            <BranchTile active={branch === "all"} onClick={() => setBranch("all")} title="All Courses" subtitle="Every course in the catalogue" />
-            {BRANCHES.map((b) => (
-              <BranchTile
-                key={b.id}
-                active={branch === b.id}
-                onClick={() => setBranch(b.id)}
-                title={b.label}
-                subtitle={b.short}
-              />
-            ))}
-          </div>
+          {!active && (
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+              <BranchTile active={false} onClick={() => setBranch("all")} title="All Courses" subtitle="Every subject, grouped by branch" />
+              {BRANCHES.map((b) => (
+                <BranchTile
+                  key={b.id}
+                  active={false}
+                  onClick={() => {
+                    setBranch(b.id);
+                    setSubjectQuery("");
+                  }}
+                  title={b.label}
+                  subtitle={b.short}
+                />
+              ))}
+            </div>
+          )}
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {skills.map((skill, i) => (
-              <SkillCard key={skill.slug} skill={skill} index={i} />
-            ))}
-          </div>
-
-          <div className="rounded-sm border border-border bg-card p-5">
-            <div className="flex flex-wrap items-baseline justify-between gap-3">
-              <h3 className="text-lg font-black tracking-tighter">
-                {active ? `Courses for ${active.label}` : "All courses"}
-              </h3>
+          {active && (
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setBranch("all")}
+                className="rounded-sm border border-primary/40 bg-primary/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-primary"
+              >
+                {active.label}
+              </button>
+              {BRANCHES.filter((b) => b.id !== branch)
+                .slice(0, 0)
+                .map(() => null)}
               <Link
                 to="/courses"
                 search={{ branch }}
-                className="font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+                className="rounded-sm border border-border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
               >
-                Open courses ↗
+                Open in course catalogue ↗
               </Link>
             </div>
-            <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {courses.map((course) => (
-                <li key={course.slug}>
-                  <Link
-                    to="/courses/$course"
-                    params={{ course: course.slug }}
-                    className="flex items-center justify-between gap-2 rounded-sm border border-border bg-surface/60 px-3 py-2.5 text-xs font-semibold transition-colors hover:border-primary/50 hover:text-primary"
-                  >
-                    <span className="truncate">{course.title}</span>
-                    <span className="shrink-0 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
-                      {course.topics.length} topics
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          )}
+
+          <input
+            value={subjectQuery}
+            onChange={(e) => setSubjectQuery(e.target.value)}
+            placeholder={
+              active
+                ? `Search ${active.label} subjects or topics (e.g. sorting, thermodynamics)`
+                : "Search every subject across all branches"
+            }
+            className="w-full rounded-sm border border-border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary/60"
+          />
+
+          {active ? (
+            <>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {BRANCH_SUBJECTS[active.id].filter(matchSubject).map((subject) => (
+                  <SubjectCard key={subject.name} subject={subject} />
+                ))}
+              </div>
+              {BRANCH_SUBJECTS[active.id].filter(matchSubject).length === 0 && (
+                <p className="rounded-sm border border-border bg-card p-6 text-sm text-muted-foreground">
+                  No subjects match that search. Try a different keyword.
+                </p>
+              )}
+            </>
+          ) : (
+            <div className="space-y-6">
+              {BRANCHES.map((b) => {
+                const subjects = BRANCH_SUBJECTS[b.id].filter(matchSubject);
+                if (subjects.length === 0) return null;
+                return (
+                  <div key={b.id}>
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <h3 className="font-mono text-xs uppercase tracking-widest text-primary">
+                        {b.label} — {b.short}
+                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setBranch(b.id);
+                          setSubjectQuery("");
+                        }}
+                        className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground hover:text-primary"
+                      >
+                        View branch ↗
+                      </button>
+                    </div>
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {subjects.map((subject) => (
+                        <SubjectCard key={`${b.id}-${subject.name}`} subject={subject} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+              {q &&
+                BRANCHES.every((b) => BRANCH_SUBJECTS[b.id].filter(matchSubject).length === 0) && (
+                  <p className="rounded-sm border border-border bg-card p-6 text-sm text-muted-foreground">
+                    No subjects match that search. Try a different keyword.
+                  </p>
+                )}
+            </div>
+          )}
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-14">
