@@ -8,7 +8,7 @@ export interface BranchSubject {
   topics: string[];
   difficulty: SubjectDifficulty;
   /** Related catalogue course for the "View Course" button (optional). */
-  courseSlug?: string;
+  courseSlug?: string | undefined;
 }
 
 const S = (
