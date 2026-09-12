@@ -71,10 +71,10 @@ const GOALS = [
 ];
 
 function Home() {
-  const [branch, setBranch] = useState<Branch>("CSE");
-  const active = BRANCHES.find((b) => b.id === branch)!;
-  const skills = skillsForBranch(branch);
-  const { state } = useSkillProgress();
+  const [branch, setBranch] = useState<BranchSelection>("all");
+  const active = BRANCHES.find((b) => b.id === branch);
+  const skills = useMemo(() => skillsForBranchId(branch), [branch]);
+  const courses = useMemo(() => coursesForBranchId(branch), [branch]);
 
   return (
     <AppShell>
