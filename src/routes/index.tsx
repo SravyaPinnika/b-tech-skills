@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { BRANCHES, type BranchId } from "@/data/branches";
 type BranchSelection = BranchId | "all";
 import { BRANCH_SUBJECTS, type BranchSubject } from "@/data/branch-subjects";
@@ -190,9 +190,6 @@ function Home() {
               >
                 {active.label}
               </button>
-              {BRANCHES.filter((b) => b.id !== branch)
-                .slice(0, 0)
-                .map(() => null)}
               <Link
                 to="/courses"
                 search={{ branch }}
