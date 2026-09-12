@@ -11,7 +11,7 @@ const BRANCH_SKILL_MAP: Partial<Record<BranchId, SkillBranch>> = {
   cse: "CSE",
   it: "IT",
   aiml: "AIML",
-  ds: "DS",
+  "ai-ds": "DS",
   "cse-ds": "DS",
   "cse-cyber": "CSE",
   "cse-iot": "CSE",
