@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { BRANCHES } from "@/data/branches";
+import { BRANCHES, type BranchId } from "@/data/branches";
+type BranchSelection = BranchId | "all";
 import { BRANCH_SUBJECTS, type BranchSubject } from "@/data/branch-subjects";
 import { AppShell } from "@/components/AppShell";
 
