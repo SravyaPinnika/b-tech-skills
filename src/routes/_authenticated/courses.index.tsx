@@ -43,15 +43,18 @@ type Completion = "all" | "completed" | "not-completed";
 
 function CoursesPage() {
   const { state, hydrated } = useCurriculumProgress();
+  const search = Route.useSearch();
   const [query, setQuery] = useState("");
   const [difficulty, setDifficulty] = useState<Difficulty | "all">("all");
   const [interviewOnly, setInterviewOnly] = useState(false);
   const [completion, setCompletion] = useState<Completion>("all");
+  const [branch, setBranch] = useState<BranchSelection>(search.branch);
 
   const q = query.trim().toLowerCase();
+  const branchCourses = useMemo(() => coursesForBranchId(branch), [branch]);
 
   const results = useMemo(() => {
-    return COURSES.map((course) => {
+    return branchCourses.map((course) => {
       const topics = course.topics.filter((topic) => {
         if (difficulty !== "all" && topic.difficulty !== difficulty) return false;
         if (interviewOnly && !topic.interviewImportant) return false;
