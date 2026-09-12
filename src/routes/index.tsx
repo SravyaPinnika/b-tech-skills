@@ -257,3 +257,37 @@ function Home() {
     </AppShell>
   );
 }
+
+function BranchTile({
+  active,
+  onClick,
+  title,
+  subtitle,
+}: {
+  active: boolean;
+  onClick: () => void;
+  title: string;
+  subtitle: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`h-full rounded-sm border p-3 text-left transition-colors ${
+        active
+          ? "border-primary bg-primary/10"
+          : "border-border bg-card hover:border-primary/50"
+      }`}
+    >
+      <span
+        className={`block text-sm font-bold tracking-tight ${active ? "text-primary" : ""}`}
+      >
+        {title}
+      </span>
+      <span className="mt-1 block text-[11px] leading-snug text-muted-foreground">
+        {subtitle}
+      </span>
+    </button>
+  );
+}
