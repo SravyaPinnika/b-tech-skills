@@ -3,7 +3,26 @@ import { useState } from "react";
 import { BRANCHES, type BranchId } from "@/data/branches";
 type BranchSelection = BranchId | "all";
 import { BRANCH_SUBJECTS, type BranchSubject } from "@/data/branch-subjects";
+import { SKILLS, type Branch as SkillBranch } from "@/data/skills";
 import { AppShell } from "@/components/AppShell";
+
+/** Maps the 13 profile branches to the skill tracks used in the placement model. */
+const BRANCH_SKILL_MAP: Partial<Record<BranchId, SkillBranch>> = {
+  cse: "CSE",
+  it: "IT",
+  aiml: "AIML",
+  ds: "DS",
+  "cse-ds": "DS",
+  "cse-cyber": "CSE",
+  "cse-iot": "CSE",
+};
+
+function skillsForSelection(selection: BranchSelection) {
+  if (selection === "all") return SKILLS;
+  const group = BRANCH_SKILL_MAP[selection];
+  if (!group) return SKILLS;
+  return SKILLS.filter((s) => s.branches.includes(group));
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
