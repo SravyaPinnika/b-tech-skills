@@ -224,6 +224,48 @@ function Home() {
                   No subjects match that search. Try a different keyword.
                 </p>
               )}
+
+              <div className="space-y-4 border-t border-border pt-6">
+                <div>
+                  <h3 className="text-xl font-black tracking-tighter sm:text-2xl">
+                    Skills &amp; placement importance
+                  </h3>
+                  <p className="mt-1 max-w-[60ch] text-sm text-muted-foreground">
+                    How much each skill decides the outcome of placement rounds for {active.label} — ranked from most to least important.
+                  </p>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {skillsForBranchId(branch).map((skill) => (
+                    <Link
+                      key={skill.slug}
+                      to="/skills/$slug"
+                      params={{ slug: skill.slug }}
+                      className="group rounded-sm border border-border bg-card p-4 transition-colors hover:border-primary/40"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h4 className="text-sm font-bold tracking-tight transition-colors group-hover:text-primary">
+                            {skill.name}
+                          </h4>
+                          <p className="mt-0.5 text-[11px] text-muted-foreground">{skill.tagline}</p>
+                        </div>
+                        <span className="font-mono text-xl font-bold italic tracking-tighter text-primary">
+                          {skill.weight}%
+                        </span>
+                      </div>
+                      <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                        <div className="h-full bg-primary" style={{ width: `${skill.weight}%` }} />
+                      </div>
+                      <p className="mt-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+                        {skill.weight}% of placement rounds test this skill
+                      </p>
+                      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                        {skill.importance}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </>
           ) : (
             <div className="space-y-6">
