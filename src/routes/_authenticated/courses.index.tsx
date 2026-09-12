@@ -14,8 +14,15 @@ import {
   topicPercent,
   useCurriculumProgress,
 } from "@/lib/curriculum-progress";
+import { BRANCHES } from "@/data/branches";
+import { coursesForBranchId, type BranchSelection } from "@/data/branch-catalog";
 
 export const Route = createFileRoute("/_authenticated/courses/")({
+  validateSearch: (input: Record<string, unknown>): { branch?: BranchSelection } => {
+    const raw = typeof input["branch"] === "string" ? input["branch"] : "all";
+    const valid = raw === "all" || BRANCHES.some((b) => b.id === raw);
+    return { branch: (valid ? raw : "all") as BranchSelection };
+  },
   head: () => ({
     meta: [
       { title: "All Courses — DSA, SQL, OS, Networks, Web & More | B.Tech Skills" },
@@ -41,15 +48,18 @@ type Completion = "all" | "completed" | "not-completed";
 
 function CoursesPage() {
   const { state, hydrated } = useCurriculumProgress();
+  const search = Route.useSearch();
   const [query, setQuery] = useState("");
   const [difficulty, setDifficulty] = useState<Difficulty | "all">("all");
   const [interviewOnly, setInterviewOnly] = useState(false);
   const [completion, setCompletion] = useState<Completion>("all");
+  const [branch, setBranch] = useState<BranchSelection>(search.branch ?? "all");
 
   const q = query.trim().toLowerCase();
+  const branchCourses = useMemo(() => coursesForBranchId(branch), [branch]);
 
   const results = useMemo(() => {
-    return COURSES.map((course) => {
+    return branchCourses.map((course) => {
       const topics = course.topics.filter((topic) => {
         if (difficulty !== "all" && topic.difficulty !== difficulty) return false;
         if (interviewOnly && !topic.interviewImportant) return false;
@@ -65,7 +75,7 @@ function CoursesPage() {
       });
       return { course, topics };
     }).filter((r) => r.topics.length > 0);
-  }, [q, difficulty, interviewOnly, completion, state]);
+  }, [branchCourses, q, difficulty, interviewOnly, completion, state]);
 
   const overall = hydrated ? overallCurriculumPercent(state) : 0;
   const matchedTopics = results.reduce((a, r) => a + r.topics.length, 0);
@@ -94,6 +104,21 @@ function CoursesPage() {
         </header>
 
         <section className="space-y-3 rounded-sm border border-border bg-card p-4">
+          <div className="space-y-2">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Your branch
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              <Chip active={branch === "all"} onClick={() => setBranch("all")}>
+                All courses
+              </Chip>
+              {BRANCHES.map((b) => (
+                <Chip key={b.id} active={branch === b.id} onClick={() => setBranch(b.id)}>
+                  {b.label}
+                </Chip>
+              ))}
+            </div>
+          </div>
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}

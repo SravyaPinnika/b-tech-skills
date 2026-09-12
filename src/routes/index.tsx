@@ -1,9 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { BRANCHES, skillsForBranch, type Branch } from "@/data/skills";
+import { useMemo, useState } from "react";
+import { BRANCHES } from "@/data/branches";
+import {
+  coursesForBranchId,
+  skillsForBranchId,
+  type BranchSelection,
+} from "@/data/branch-catalog";
 import { SkillCard } from "@/components/SkillCard";
 import { AppShell } from "@/components/AppShell";
-import { useSkillProgress } from "@/lib/skill-progress";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -67,10 +71,10 @@ const GOALS = [
 ];
 
 function Home() {
-  const [branch, setBranch] = useState<Branch>("CSE");
-  const active = BRANCHES.find((b) => b.id === branch)!;
-  const skills = skillsForBranch(branch);
-  const { state } = useSkillProgress();
+  const [branch, setBranch] = useState<BranchSelection>("all");
+  const active = BRANCHES.find((b) => b.id === branch);
+  const skills = useMemo(() => skillsForBranchId(branch), [branch]);
+  const courses = useMemo(() => coursesForBranchId(branch), [branch]);
 
   return (
     <AppShell>
@@ -134,34 +138,68 @@ function Home() {
         <section className="mx-auto max-w-6xl space-y-5 px-4 py-8">
           <div className="flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4">
             <div>
-              <h2 className="text-2xl font-black tracking-tighter sm:text-3xl">Explore skills</h2>
-              <p className="mt-1 text-sm text-muted-foreground">{active.blurb}</p>
+              <h2 className="text-2xl font-black tracking-tighter sm:text-3xl">
+                Choose your branch
+              </h2>
+              <p className="mt-1 max-w-[60ch] text-sm text-muted-foreground">
+                {active
+                  ? active.blurb
+                  : "All 13 B.Tech branches, with every course in the catalogue."}
+              </p>
             </div>
             <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
               Ranked by placement weightage
             </span>
           </div>
 
-          <nav className="flex gap-1 overflow-x-auto pb-1 no-scrollbar">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+            <BranchTile active={branch === "all"} onClick={() => setBranch("all")} title="All Courses" subtitle="Every course in the catalogue" />
             {BRANCHES.map((b) => (
-              <button
+              <BranchTile
                 key={b.id}
+                active={branch === b.id}
                 onClick={() => setBranch(b.id)}
-                className={`shrink-0 rounded-sm px-4 py-1.5 text-xs font-bold tracking-tight transition-colors ${
-                  b.id === branch
-                    ? "bg-foreground text-background"
-                    : "bg-secondary text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {b.label}
-              </button>
+                title={b.label}
+                subtitle={b.short}
+              />
             ))}
-          </nav>
+          </div>
 
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {skills.map((skill, i) => (
               <SkillCard key={skill.slug} skill={skill} index={i} />
             ))}
+          </div>
+
+          <div className="rounded-sm border border-border bg-card p-5">
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <h3 className="text-lg font-black tracking-tighter">
+                {active ? `Courses for ${active.label}` : "All courses"}
+              </h3>
+              <Link
+                to="/courses"
+                search={{ branch }}
+                className="font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+              >
+                Open courses ↗
+              </Link>
+            </div>
+            <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {courses.map((course) => (
+                <li key={course.slug}>
+                  <Link
+                    to="/courses/$course"
+                    params={{ course: course.slug }}
+                    className="flex items-center justify-between gap-2 rounded-sm border border-border bg-surface/60 px-3 py-2.5 text-xs font-semibold transition-colors hover:border-primary/50 hover:text-primary"
+                  >
+                    <span className="truncate">{course.title}</span>
+                    <span className="shrink-0 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+                      {course.topics.length} topics
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
@@ -217,5 +255,39 @@ function Home() {
         </section>
       </main>
     </AppShell>
+  );
+}
+
+function BranchTile({
+  active,
+  onClick,
+  title,
+  subtitle,
+}: {
+  active: boolean;
+  onClick: () => void;
+  title: string;
+  subtitle: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`h-full rounded-sm border p-3 text-left transition-colors ${
+        active
+          ? "border-primary bg-primary/10"
+          : "border-border bg-card hover:border-primary/50"
+      }`}
+    >
+      <span
+        className={`block text-sm font-bold tracking-tight ${active ? "text-primary" : ""}`}
+      >
+        {title}
+      </span>
+      <span className="mt-1 block text-[11px] leading-snug text-muted-foreground">
+        {subtitle}
+      </span>
+    </button>
   );
 }
