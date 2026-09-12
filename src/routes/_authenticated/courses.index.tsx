@@ -18,8 +18,8 @@ import { BRANCHES } from "@/data/branches";
 import { coursesForBranchId, type BranchSelection } from "@/data/branch-catalog";
 
 export const Route = createFileRoute("/_authenticated/courses/")({
-  validateSearch: (input: Record<string, unknown>) => {
-    const raw = typeof input.branch === "string" ? input.branch : "all";
+  validateSearch: (input: Record<string, unknown>): { branch?: BranchSelection } => {
+    const raw = typeof input["branch"] === "string" ? input["branch"] : "all";
     const valid = raw === "all" || BRANCHES.some((b) => b.id === raw);
     return { branch: (valid ? raw : "all") as BranchSelection };
   },
