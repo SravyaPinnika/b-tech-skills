@@ -70,7 +70,7 @@ function CoursesPage() {
       });
       return { course, topics };
     }).filter((r) => r.topics.length > 0);
-  }, [q, difficulty, interviewOnly, completion, state]);
+  }, [branchCourses, q, difficulty, interviewOnly, completion, state]);
 
   const overall = hydrated ? overallCurriculumPercent(state) : 0;
   const matchedTopics = results.reduce((a, r) => a + r.topics.length, 0);
