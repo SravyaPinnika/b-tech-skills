@@ -53,7 +53,7 @@ function CoursesPage() {
   const [difficulty, setDifficulty] = useState<Difficulty | "all">("all");
   const [interviewOnly, setInterviewOnly] = useState(false);
   const [completion, setCompletion] = useState<Completion>("all");
-  const [branch, setBranch] = useState<BranchSelection>(search.branch);
+  const [branch, setBranch] = useState<BranchSelection>(search.branch ?? "all");
 
   const q = query.trim().toLowerCase();
   const branchCourses = useMemo(() => coursesForBranchId(branch), [branch]);
