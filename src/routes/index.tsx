@@ -352,3 +352,55 @@ function BranchTile({
     </button>
   );
 }
+
+const DIFFICULTY_TONE: Record<string, string> = {
+  Beginner: "border-border text-muted-foreground",
+  Intermediate: "border-primary/40 bg-primary/10 text-primary",
+  Advanced: "border-primary/40 bg-primary/10 text-primary",
+};
+
+function SubjectCard({ subject }: { subject: BranchSubject }) {
+  return (
+    <article className="flex h-full flex-col rounded-sm border border-border bg-card p-5 transition-colors hover:border-primary/40">
+      <div className="flex items-start justify-between gap-2">
+        <h4 className="text-sm font-bold tracking-tight">{subject.name}</h4>
+        <span
+          className={`shrink-0 rounded-sm border px-2 py-1 font-mono text-[9px] uppercase tracking-widest ${DIFFICULTY_TONE[subject.difficulty]}`}
+        >
+          {subject.difficulty}
+        </span>
+      </div>
+      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+        {subject.description}
+      </p>
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        {subject.topics.map((topic) => (
+          <span
+            key={topic}
+            className="rounded-sm bg-secondary px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-muted-foreground"
+          >
+            {topic}
+          </span>
+        ))}
+      </div>
+      <div className="mt-4 pt-1">
+        {subject.courseSlug ? (
+          <Link
+            to="/courses/$course"
+            params={{ course: subject.courseSlug }}
+            className="inline-block rounded-sm bg-primary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            View course ↗
+          </Link>
+        ) : (
+          <Link
+            to="/courses"
+            className="inline-block rounded-sm bg-primary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            View course ↗
+          </Link>
+        )}
+      </div>
+    </article>
+  );
+}
