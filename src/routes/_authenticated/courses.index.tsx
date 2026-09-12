@@ -104,6 +104,21 @@ function CoursesPage() {
         </header>
 
         <section className="space-y-3 rounded-sm border border-border bg-card p-4">
+          <div className="space-y-2">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Your branch
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              <Chip active={branch === "all"} onClick={() => setBranch("all")}>
+                All courses
+              </Chip>
+              {BRANCHES.map((b) => (
+                <Chip key={b.id} active={branch === b.id} onClick={() => setBranch(b.id)}>
+                  {b.label}
+                </Chip>
+              ))}
+            </div>
+          </div>
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
