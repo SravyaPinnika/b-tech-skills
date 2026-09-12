@@ -14,6 +14,8 @@ import {
   topicPercent,
   useCurriculumProgress,
 } from "@/lib/curriculum-progress";
+import { BRANCHES } from "@/data/branches";
+import { coursesForBranchId, type BranchSelection } from "@/data/branch-catalog";
 
 export const Route = createFileRoute("/_authenticated/courses/")({
   head: () => ({
