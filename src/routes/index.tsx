@@ -283,6 +283,64 @@ function Home() {
           )}
         </section>
 
+        <section className="border-t border-border bg-secondary/30">
+          <div className="mx-auto max-w-6xl px-4 py-14">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <h2 className="text-2xl font-black tracking-tighter sm:text-3xl">
+                  Skills &amp; their placement importance
+                </h2>
+                <p className="mt-2 max-w-[60ch] text-sm text-muted-foreground">
+                  {active
+                    ? `How much each skill matters in placement rounds for ${active.short}.`
+                    : "How much each skill matters in real placement rounds — ranked by requirement."}
+                </p>
+              </div>
+              <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                % = share of placement rounds where the skill decides the outcome
+              </span>
+            </div>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {skillsForSelection(branch)
+                .slice()
+                .sort((a, b) => b.weight - a.weight)
+                .map((skill) => (
+                  <article
+                    key={skill.slug}
+                    className="flex h-full flex-col rounded-sm border border-border bg-card p-5 transition-colors hover:border-primary/40"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="text-sm font-bold tracking-tight">{skill.name}</h3>
+                        <p className="mt-0.5 text-[11px] text-muted-foreground">{skill.tagline}</p>
+                      </div>
+                      <span className="font-mono text-xl font-black italic tracking-tighter text-primary">
+                        {skill.weight}%
+                      </span>
+                    </div>
+                    <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                      <div className="h-full bg-primary" style={{ width: `${skill.weight}%` }} />
+                    </div>
+                    <p className="mt-1.5 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+                      {skill.weight}% placement requirement
+                    </p>
+                    <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                      {skill.importance}
+                    </p>
+                    <div className="mt-4 pt-1">
+                      <Link
+                        to="/courses"
+                        className="inline-block rounded-sm border border-border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest transition-colors hover:border-primary/50 hover:text-primary"
+                      >
+                        Go to courses →
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+            </div>
+          </div>
+        </section>
+
         <section className="mx-auto max-w-6xl px-4 py-14">
           <h2 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
             What you get
