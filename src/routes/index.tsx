@@ -3,6 +3,7 @@ import { useState } from "react";
 import { BRANCHES, type BranchId } from "@/data/branches";
 type BranchSelection = BranchId | "all";
 import { BRANCH_SUBJECTS, type BranchSubject } from "@/data/branch-subjects";
+import { skillsForBranchId } from "@/data/branch-catalog";
 import { AppShell } from "@/components/AppShell";
 
 export const Route = createFileRoute("/")({
