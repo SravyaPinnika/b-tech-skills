@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { BRANCHES, type BranchId } from "@/data/branches";
-type BranchSelection = BranchId | "all";
 import { BRANCH_SUBJECTS, type BranchSubject } from "@/data/branch-subjects";
 import { skillDemand } from "@/data/branch-skill-demand";
 import { AppShell } from "@/components/AppShell";
@@ -58,17 +57,8 @@ const STEPS = [
   { n: "04", title: "Get placement ready", body: "Projects, interview rounds and live hiring feed." },
 ];
 
-const GOALS = [
-  "Software Developer",
-  "Full Stack Developer",
-  "Data Analyst",
-  "Data Scientist",
-  "AI/ML Engineer",
-  "Cloud/DevOps Engineer",
-];
-
 function Home() {
-  const [branch, setBranch] = useState<BranchSelection>("all");
+  const [branch, setBranch] = useState<BranchId | null>(null);
   const [subjectQuery, setSubjectQuery] = useState("");
   const active = BRANCHES.find((b) => b.id === branch);
 
@@ -118,26 +108,6 @@ function Home() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-4 py-14">
-          <h2 className="text-2xl font-black tracking-tighter sm:text-3xl">
-            Choose your career goal
-          </h2>
-          <p className="mt-2 max-w-[52ch] text-sm text-muted-foreground">
-            Pick the role you want, and your roadmap reorders itself around it.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {GOALS.map((goal) => (
-              <Link
-                key={goal}
-                to="/profile"
-                className="rounded-sm border border-border bg-card px-4 py-2 text-xs font-semibold transition-colors hover:border-primary/50 hover:text-primary"
-              >
-                {goal}
-              </Link>
-            ))}
-          </div>
-        </section>
-
         <section className="mx-auto max-w-6xl space-y-5 px-4 py-8">
           <div className="flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4">
             <div>
@@ -154,7 +124,7 @@ function Home() {
               <button
                 type="button"
                 onClick={() => {
-                  setBranch("all");
+                  setBranch(null);
                   setSubjectQuery("");
                 }}
                 className="rounded-sm border border-border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
@@ -166,7 +136,6 @@ function Home() {
 
           {!active && (
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-              <BranchTile active={false} onClick={() => setBranch("all")} title="All Courses" subtitle="Every subject, grouped by branch" />
               {BRANCHES.map((b) => (
                 <BranchTile
                   key={b.id}
@@ -186,7 +155,7 @@ function Home() {
             <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
-                onClick={() => setBranch("all")}
+                onClick={() => setBranch(null)}
                 className="rounded-sm border border-primary/40 bg-primary/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-primary"
               >
                 {active.label}
@@ -201,50 +170,20 @@ function Home() {
             </div>
           )}
 
-          {active && (
-            <div className="rounded-sm border border-border bg-card p-5">
-              <h3 className="text-sm font-bold tracking-tight">
-                Skill importance in {active.label} company requirements
-              </h3>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Share of job requirements for this branch that ask for each skill — highest first.
-              </p>
-              <ul className="mt-4 space-y-3">
-                {skillDemand(active.id).map((d) => (
-                  <li key={d.skill}>
-                    <div className="flex items-baseline justify-between gap-3">
-                      <span className="text-xs font-semibold">{d.skill}</span>
-                      <span className="font-mono text-sm font-bold italic tracking-tighter">
-                        {d.percent}%
-                      </span>
-                    </div>
-                    <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
-                      <div className="h-full rounded-full bg-primary" style={{ width: `${d.percent}%` }} />
-                    </div>
-                    <p className="mt-1 text-[11px] leading-snug text-muted-foreground">{d.why}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          <input
+          {active && <input
             value={subjectQuery}
             onChange={(e) => setSubjectQuery(e.target.value)}
-            placeholder={
-              active
-                ? `Search ${active.label} subjects or topics (e.g. sorting, thermodynamics)`
-                : "Search every subject across all branches"
-            }
+            placeholder={`Search ${active.label} subjects or topics (e.g. sorting, thermodynamics)`}
             className="w-full rounded-sm border border-border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary/60"
-          />
+          />}
 
           {active ? (
             <>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {BRANCH_SUBJECTS[active.id].filter(matchSubject).map((subject) => (
-                  <SubjectCard key={subject.name} subject={subject} />
-                ))}
+                {BRANCH_SUBJECTS[active.id].filter(matchSubject).map((subject, index) => {
+                  const demand = skillDemand(active.id)[index % skillDemand(active.id).length];
+                  return <SubjectCard key={subject.name} subject={subject} demand={demand} />;
+                })}
               </div>
               {BRANCH_SUBJECTS[active.id].filter(matchSubject).length === 0 && (
                 <p className="rounded-sm border border-border bg-card p-6 text-sm text-muted-foreground">
@@ -252,44 +191,7 @@ function Home() {
                 </p>
               )}
             </>
-          ) : (
-            <div className="space-y-6">
-              {BRANCHES.map((b) => {
-                const subjects = BRANCH_SUBJECTS[b.id].filter(matchSubject);
-                if (subjects.length === 0) return null;
-                return (
-                  <div key={b.id}>
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <h3 className="font-mono text-xs uppercase tracking-widest text-primary">
-                        {b.label} — {b.short}
-                      </h3>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setBranch(b.id);
-                          setSubjectQuery("");
-                        }}
-                        className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground hover:text-primary"
-                      >
-                        View branch ↗
-                      </button>
-                    </div>
-                    <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                      {subjects.map((subject) => (
-                        <SubjectCard key={`${b.id}-${subject.name}`} subject={subject} />
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-              {q &&
-                BRANCHES.every((b) => BRANCH_SUBJECTS[b.id].filter(matchSubject).length === 0) && (
-                  <p className="rounded-sm border border-border bg-card p-6 text-sm text-muted-foreground">
-                    No subjects match that search. Try a different keyword.
-                  </p>
-                )}
-            </div>
-          )}
+          ) : null}
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-14">
@@ -326,22 +228,6 @@ function Home() {
           </div>
         </section>
 
-        <section className="border-t border-border bg-secondary/30">
-          <div className="mx-auto max-w-3xl px-4 py-16 text-center">
-            <h2 className="text-3xl font-black tracking-tighter sm:text-4xl">
-              Start building your career today
-            </h2>
-            <p className="mx-auto mt-3 max-w-[46ch] text-sm text-muted-foreground">
-              Ten minutes of setup, then one clear next step every single day.
-            </p>
-            <Link
-              to="/profile"
-              className="mt-6 inline-block rounded-sm bg-primary px-7 py-3 text-sm font-bold uppercase tracking-widest text-primary-foreground hover:bg-primary/90"
-            >
-              Create my roadmap
-            </Link>
-          </div>
-        </section>
       </main>
     </AppShell>
   );
@@ -387,7 +273,13 @@ const DIFFICULTY_TONE: Record<string, string> = {
   Advanced: "border-primary/40 bg-primary/10 text-primary",
 };
 
-function SubjectCard({ subject }: { subject: BranchSubject }) {
+function SubjectCard({
+  subject,
+  demand,
+}: {
+  subject: BranchSubject;
+  demand: ReturnType<typeof skillDemand>[number] | undefined;
+}) {
   return (
     <article className="flex h-full flex-col rounded-sm border border-border bg-card p-5 transition-colors hover:border-primary/40">
       <div className="flex items-start justify-between gap-2">
@@ -401,6 +293,22 @@ function SubjectCard({ subject }: { subject: BranchSubject }) {
       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
         {subject.description}
       </p>
+      {demand && (
+        <div className="mt-3 border-y border-border py-3">
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+              Company requirement
+            </span>
+            <span className="font-mono text-base font-bold text-primary">{demand.percent}%</span>
+          </div>
+          <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-secondary">
+            <div className="h-full rounded-full bg-primary" style={{ width: `${demand.percent}%` }} />
+          </div>
+          <p className="mt-2 text-[11px] leading-snug text-muted-foreground">
+            Related priority: {demand.skill}. {demand.why}
+          </p>
+        </div>
+      )}
       <div className="mt-3 flex flex-wrap gap-1.5">
         {subject.topics.map((topic) => (
           <span
