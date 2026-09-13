@@ -346,9 +346,10 @@ function SubjectCard({
         ) : (
           <Link
             to="/courses"
-            className="inline-block rounded-sm bg-primary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
+            search={{ branch: branchId }}
+            className="inline-block rounded-sm border border-border px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest transition-colors hover:border-primary/50 hover:text-primary"
           >
-            View course ↗
+            Browse {`${subject.name}`.length > 22 ? "branch courses" : "branch courses"} ↗
           </Link>
         )}
       </div>
