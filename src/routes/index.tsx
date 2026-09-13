@@ -162,7 +162,7 @@ function Home() {
               </button>
               <Link
                 to="/courses"
-                search={{ branch }}
+                search={{ branch: active.id }}
                 className="rounded-sm border border-border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
               >
                 Open in course catalogue ↗
@@ -181,7 +181,7 @@ function Home() {
             <>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {BRANCH_SUBJECTS[active.id].filter(matchSubject).map((subject, index) => {
-                  const demand = skillDemand(active.id)[index % skillDemand(active.id).length];
+                  const demand = demandForSubject(active.id, subject, index);
                   return <SubjectCard key={subject.name} subject={subject} demand={demand} />;
                 })}
               </div>
@@ -272,6 +272,19 @@ const DIFFICULTY_TONE: Record<string, string> = {
   Intermediate: "border-primary/40 bg-primary/10 text-primary",
   Advanced: "border-primary/40 bg-primary/10 text-primary",
 };
+
+function demandForSubject(branch: BranchId, subject: BranchSubject, fallbackIndex: number) {
+  const demand = skillDemand(branch);
+  const subjectWords = `${subject.name} ${subject.topics.join(" ")}`
+    .toLowerCase()
+    .split(/[^a-z0-9+#]+/)
+    .filter((word) => word.length > 3);
+  const match = demand.find((item) => {
+    const skill = item.skill.toLowerCase();
+    return subjectWords.some((word) => skill.includes(word));
+  });
+  return match ?? demand[fallbackIndex % demand.length];
+}
 
 function SubjectCard({
   subject,

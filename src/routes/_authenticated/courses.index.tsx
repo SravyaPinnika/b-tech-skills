@@ -185,14 +185,23 @@ function CoursesPage() {
                       </div>
                       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{subject.description}</p>
                       <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground"><span className="font-semibold text-foreground">Important topics:</span> {subject.topics.join(", ")}</p>
-                      <Link
-                        to={subject.courseSlug ? "/courses/$course" : "/courses"}
-                        params={subject.courseSlug ? { course: subject.courseSlug } : undefined}
-                        search={subject.courseSlug ? undefined : { branch: branchItem.id }}
-                        className="mt-4 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-                      >
-                        View course ↗
-                      </Link>
+                      {subject.courseSlug ? (
+                        <Link
+                          to="/courses/$course"
+                          params={{ course: subject.courseSlug }}
+                          className="mt-4 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+                        >
+                          View course ↗
+                        </Link>
+                      ) : (
+                        <Link
+                          to="/courses"
+                          search={{ branch: branchItem.id }}
+                          className="mt-4 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+                        >
+                          View course ↗
+                        </Link>
+                      )}
                     </article>
                   ))}
                 </div>
