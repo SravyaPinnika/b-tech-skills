@@ -289,9 +289,11 @@ function demandForSubject(branch: BranchId, subject: BranchSubject, fallbackInde
 function SubjectCard({
   subject,
   demand,
+  branchId,
 }: {
   subject: BranchSubject;
   demand: ReturnType<typeof skillDemand>[number] | undefined;
+  branchId: BranchId;
 }) {
   return (
     <article className="flex h-full flex-col rounded-sm border border-border bg-card p-5 transition-colors hover:border-primary/40">
