@@ -171,15 +171,16 @@ function CoursesPage() {
             </h2>
           </div>
           {(branch === "all" ? BRANCHES : BRANCHES.filter((item) => item.id === branch)).map((branchItem) => {
-            const subjects = BRANCH_SUBJECTS[branchItem.id]
-              .map((subject, index) => ({ subject, index }))
-              .filter(({ subject }) => subjectMatches(subject));
+            const subjects = BRANCH_SUBJECTS[branchItem.id].filter(subjectMatches);
             if (subjects.length === 0) return null;
             return (
               <div key={branchItem.id}>
                 {branch === "all" && <h3 className="mb-3 font-mono text-xs uppercase tracking-widest text-primary">{branchItem.label} · {branchItem.short}</h3>}
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {subjects.map(({ subject, index }) => {
+                  {subjects.map((subject) => {
+                    const linkedCourse = subject.courseSlug
+                      ? COURSES.find((c) => c.slug === subject.courseSlug)
+                      : undefined;
                     return (
                     <article key={`${branchItem.id}-${subject.name}`} className="flex flex-col border border-border bg-card p-4">
                       <div className="flex items-start justify-between gap-3">
@@ -188,13 +189,24 @@ function CoursesPage() {
                       </div>
                       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{subject.description}</p>
                       <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground"><span className="font-semibold text-foreground">Important topics:</span> {subject.topics.join(", ")}</p>
-                      <Link
-                        to="/subjects/$branch/$index"
-                        params={{ branch: branchItem.id, index: String(index) }}
-                        className="mt-3 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-                      >
-                        Open {subject.name} ↗
-                      </Link>
+                      {linkedCourse ? (
+                        <>
+                          <p className="mt-3 text-[11px] text-muted-foreground">
+                            Linked course: <span className="text-foreground">{linkedCourse.title}</span>
+                          </p>
+                          <Link
+                            to="/courses/$course"
+                            params={{ course: linkedCourse.slug }}
+                            className="mt-2 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+                          >
+                            Open {linkedCourse.title} ↗
+                          </Link>
+                        </>
+                      ) : (
+                        <p className="mt-3 text-[11px] text-muted-foreground">
+                          No dedicated course yet for this subject.
+                        </p>
+                      )}
                     </article>
                     );
                   })}
