@@ -182,7 +182,14 @@ function Home() {
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {BRANCH_SUBJECTS[active.id].filter(matchSubject).map((subject, index) => {
                   const demand = demandForSubject(active.id, subject, index);
-                  return <SubjectCard key={subject.name} subject={subject} demand={demand} />;
+                  return (
+                    <SubjectCard
+                      key={subject.name}
+                      subject={subject}
+                      demand={demand}
+                      branchId={active.id}
+                    />
+                  );
                 })}
               </div>
               {BRANCH_SUBJECTS[active.id].filter(matchSubject).length === 0 && (
