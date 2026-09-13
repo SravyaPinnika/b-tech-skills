@@ -177,7 +177,11 @@ function CoursesPage() {
               <div key={branchItem.id}>
                 {branch === "all" && <h3 className="mb-3 font-mono text-xs uppercase tracking-widest text-primary">{branchItem.label} · {branchItem.short}</h3>}
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {subjects.map((subject) => (
+                  {subjects.map((subject) => {
+                    const linkedCourse = subject.courseSlug
+                      ? COURSES.find((c) => c.slug === subject.courseSlug)
+                      : undefined;
+                    return (
                     <article key={`${branchItem.id}-${subject.name}`} className="flex flex-col border border-border bg-card p-4">
                       <div className="flex items-start justify-between gap-3">
                         <h3 className="text-sm font-bold">{subject.name}</h3>
