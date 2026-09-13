@@ -23,6 +23,7 @@ import { Route as AuthenticatedCoursesIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedDsaTopicRouteImport } from './routes/_authenticated/dsa.$topic'
 import { Route as AuthenticatedSkillsSlugRouteImport } from './routes/_authenticated/skills.$slug'
 import { Route as AuthenticatedCoursesCourseIndexRouteImport } from './routes/_authenticated/courses.$course.index'
+import { Route as AuthenticatedSubjectsBranchIndexRouteImport } from './routes/_authenticated/subjects.$branch.$index'
 import { Route as ApiPublicHooksRefreshRecruitersRouteImport } from './routes/api/public/hooks/refresh-recruiters'
 import { Route as ApiPublicHooksRefreshToolsRouteImport } from './routes/api/public/hooks/refresh-tools'
 import { Route as AuthenticatedCoursesCourseTopicIndexRouteImport } from './routes/_authenticated/courses.$course.$topic.index'
@@ -99,6 +100,12 @@ const AuthenticatedCoursesCourseIndexRoute =
     path: '/courses/$course/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedSubjectsBranchIndexRoute =
+  AuthenticatedSubjectsBranchIndexRouteImport.update({
+    id: '/subjects/$branch/$index',
+    path: '/subjects/$branch/$index',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiPublicHooksRefreshRecruitersRoute =
   ApiPublicHooksRefreshRecruitersRouteImport.update({
     id: '/api/public/hooks/refresh-recruiters',
@@ -137,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/courses/': typeof AuthenticatedCoursesIndexRoute
+  '/subjects/$branch/$index': typeof AuthenticatedSubjectsBranchIndexRoute
   '/api/public/hooks/refresh-recruiters': typeof ApiPublicHooksRefreshRecruitersRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
   '/courses/$course/': typeof AuthenticatedCoursesCourseIndexRoute
@@ -156,6 +164,7 @@ export interface FileRoutesByTo {
   '/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/courses': typeof AuthenticatedCoursesIndexRoute
+  '/subjects/$branch/$index': typeof AuthenticatedSubjectsBranchIndexRoute
   '/api/public/hooks/refresh-recruiters': typeof ApiPublicHooksRefreshRecruitersRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
   '/courses/$course': typeof AuthenticatedCoursesCourseIndexRoute
@@ -177,6 +186,7 @@ export interface FileRoutesById {
   '/_authenticated/dsa/$topic': typeof AuthenticatedDsaTopicRoute
   '/_authenticated/skills/$slug': typeof AuthenticatedSkillsSlugRoute
   '/_authenticated/courses/': typeof AuthenticatedCoursesIndexRoute
+  '/_authenticated/subjects/$branch/$index': typeof AuthenticatedSubjectsBranchIndexRoute
   '/api/public/hooks/refresh-recruiters': typeof ApiPublicHooksRefreshRecruitersRoute
   '/api/public/hooks/refresh-tools': typeof ApiPublicHooksRefreshToolsRoute
   '/_authenticated/courses/$course/': typeof AuthenticatedCoursesCourseIndexRoute
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/dsa/$topic'
     | '/skills/$slug'
     | '/courses/'
+    | '/subjects/$branch/$index'
     | '/api/public/hooks/refresh-recruiters'
     | '/api/public/hooks/refresh-tools'
     | '/courses/$course/'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/dsa/$topic'
     | '/skills/$slug'
     | '/courses'
+    | '/subjects/$branch/$index'
     | '/api/public/hooks/refresh-recruiters'
     | '/api/public/hooks/refresh-tools'
     | '/courses/$course'
@@ -237,6 +249,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dsa/$topic'
     | '/_authenticated/skills/$slug'
     | '/_authenticated/courses/'
+    | '/_authenticated/subjects/$branch/$index'
     | '/api/public/hooks/refresh-recruiters'
     | '/api/public/hooks/refresh-tools'
     | '/_authenticated/courses/$course/'
@@ -352,6 +365,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCoursesCourseIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/subjects/$branch/$index': {
+      id: '/_authenticated/subjects/$branch/$index'
+      path: '/subjects/$branch/$index'
+      fullPath: '/subjects/$branch/$index'
+      preLoaderRoute: typeof AuthenticatedSubjectsBranchIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/hooks/refresh-recruiters': {
       id: '/api/public/hooks/refresh-recruiters'
       path: '/api/public/hooks/refresh-recruiters'
@@ -394,6 +414,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDsaTopicRoute: typeof AuthenticatedDsaTopicRoute
   AuthenticatedSkillsSlugRoute: typeof AuthenticatedSkillsSlugRoute
   AuthenticatedCoursesIndexRoute: typeof AuthenticatedCoursesIndexRoute
+  AuthenticatedSubjectsBranchIndexRoute: typeof AuthenticatedSubjectsBranchIndexRoute
   AuthenticatedCoursesCourseIndexRoute: typeof AuthenticatedCoursesCourseIndexRoute
   AuthenticatedCoursesCourseTopicExamRoute: typeof AuthenticatedCoursesCourseTopicExamRoute
   AuthenticatedCoursesCourseTopicIndexRoute: typeof AuthenticatedCoursesCourseTopicIndexRoute
@@ -410,6 +431,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDsaTopicRoute: AuthenticatedDsaTopicRoute,
   AuthenticatedSkillsSlugRoute: AuthenticatedSkillsSlugRoute,
   AuthenticatedCoursesIndexRoute: AuthenticatedCoursesIndexRoute,
+  AuthenticatedSubjectsBranchIndexRoute: AuthenticatedSubjectsBranchIndexRoute,
   AuthenticatedCoursesCourseIndexRoute: AuthenticatedCoursesCourseIndexRoute,
   AuthenticatedCoursesCourseTopicExamRoute:
     AuthenticatedCoursesCourseTopicExamRoute,

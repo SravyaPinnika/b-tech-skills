@@ -3,7 +3,6 @@ import { useState } from "react";
 import { BRANCHES, type BranchId } from "@/data/branches";
 import { BRANCH_SUBJECTS, type BranchSubject } from "@/data/branch-subjects";
 import { skillDemand } from "@/data/branch-skill-demand";
-import { COURSES } from "@/data/curriculum";
 import { AppShell } from "@/components/AppShell";
 
 export const Route = createFileRoute("/")({
@@ -181,9 +180,17 @@ function Home() {
           {active ? (
             <>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {BRANCH_SUBJECTS[active.id].filter(matchSubject).map((subject, index) => {
+                {BRANCH_SUBJECTS[active.id].map((subject, index) => ({ subject, index })).filter(({ subject }) => matchSubject(subject)).map(({ subject, index }) => {
                   const demand = demandForSubject(active.id, subject, index);
-                  return <SubjectCard key={subject.name} subject={subject} demand={demand} />;
+                  return (
+                    <SubjectCard
+                      key={subject.name}
+                      subject={subject}
+                      demand={demand}
+                      branchId={active.id}
+                      index={index}
+                    />
+                  );
                 })}
               </div>
               {BRANCH_SUBJECTS[active.id].filter(matchSubject).length === 0 && (
@@ -290,13 +297,14 @@ function demandForSubject(branch: BranchId, subject: BranchSubject, fallbackInde
 function SubjectCard({
   subject,
   demand,
+  branchId,
+  index,
 }: {
   subject: BranchSubject;
   demand: ReturnType<typeof skillDemand>[number] | undefined;
+  branchId: BranchId;
+  index: number;
 }) {
-  const linkedCourse = subject.courseSlug
-    ? COURSES.find((c) => c.slug === subject.courseSlug)
-    : undefined;
   return (
     <article className="flex h-full flex-col rounded-sm border border-border bg-card p-5 transition-colors hover:border-primary/40">
       <div className="flex items-start justify-between gap-2">
@@ -337,32 +345,13 @@ function SubjectCard({
         ))}
       </div>
       <div className="mt-4 space-y-2 pt-1">
-        {linkedCourse ? (
-          <>
-            <p className="text-[11px] leading-snug text-muted-foreground">
-              Linked course: <span className="text-foreground">{linkedCourse.title}</span>
-            </p>
-            <Link
-              to="/courses/$course"
-              params={{ course: linkedCourse.slug }}
-              className="inline-block rounded-sm bg-primary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              Open {linkedCourse.title} ↗
-            </Link>
-          </>
-        ) : (
-          <>
-            <p className="text-[11px] leading-snug text-muted-foreground">
-              No dedicated course yet — browse the full catalogue for related material.
-            </p>
-            <Link
-              to="/courses"
-              className="inline-block rounded-sm border border-border px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest transition-colors hover:border-primary/50 hover:text-primary"
-            >
-              Browse courses ↗
-            </Link>
-          </>
-        )}
+        <Link
+          to="/subjects/$branch/$index"
+          params={{ branch: branchId, index: String(index) }}
+          className="inline-block rounded-sm bg-primary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          Open {subject.name} ↗
+        </Link>
       </div>
     </article>
   );
