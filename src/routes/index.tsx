@@ -3,6 +3,7 @@ import { useState } from "react";
 import { BRANCHES, type BranchId } from "@/data/branches";
 type BranchSelection = BranchId | "all";
 import { BRANCH_SUBJECTS, type BranchSubject } from "@/data/branch-subjects";
+import { skillDemand } from "@/data/branch-skill-demand";
 import { AppShell } from "@/components/AppShell";
 
 export const Route = createFileRoute("/")({
@@ -197,6 +198,33 @@ function Home() {
               >
                 Open in course catalogue ↗
               </Link>
+            </div>
+          )}
+
+          {active && (
+            <div className="rounded-sm border border-border bg-card p-5">
+              <h3 className="text-sm font-bold tracking-tight">
+                Skill importance in {active.label} company requirements
+              </h3>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Share of job requirements for this branch that ask for each skill — highest first.
+              </p>
+              <ul className="mt-4 space-y-3">
+                {skillDemand(active.id).map((d) => (
+                  <li key={d.skill}>
+                    <div className="flex items-baseline justify-between gap-3">
+                      <span className="text-xs font-semibold">{d.skill}</span>
+                      <span className="font-mono text-sm font-bold italic tracking-tighter">
+                        {d.percent}%
+                      </span>
+                    </div>
+                    <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                      <div className="h-full rounded-full bg-primary" style={{ width: `${d.percent}%` }} />
+                    </div>
+                    <p className="mt-1 text-[11px] leading-snug text-muted-foreground">{d.why}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 
