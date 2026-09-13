@@ -178,32 +178,6 @@ export const BRANCH_SUBJECTS: Record<BranchId, BranchSubject[]> = {
   ],
 };
 
-/**
- * A subject may only link straight into a catalogue course when the course
- * really teaches that subject. Anything else would open an unrelated course,
- * so those subjects fall back to the branch course listing instead.
- */
-const EXACT_COURSE_MATCH: Record<string, string> = {
-  "core-programming-languages": "Programming in C / C++|Programming Fundamentals|Python Programming|Programming for Data Science",
-  "data-structures-algorithms-dsa": "Data Structures|Algorithms",
-  "dbms-sql": "Database Management Systems|Database Management",
-  "operating-systems": "Operating Systems",
-  "computer-networks": "Computer Networks",
-  "object-oriented-programming": "Object-Oriented Programming",
-  "web-development": "Web Technologies",
-  "devops-cloud": "Cloud Computing",
-  "ai-ml-llm-generative-ai":
-    "Machine Learning|Deep Learning|Natural Language Processing|Computer Vision|Reinforcement Learning",
-};
-
-for (const subjects of Object.values(BRANCH_SUBJECTS)) {
-  for (const subject of subjects) {
-    if (!subject.courseSlug) continue;
-    const allowed = EXACT_COURSE_MATCH[subject.courseSlug]?.split("|") ?? [];
-    if (!allowed.includes(subject.name)) subject.courseSlug = undefined;
-  }
-}
-
 export function subjectsForBranch(selection: BranchId | "all") {
   if (selection === "all") return null;
   return BRANCH_SUBJECTS[selection] ?? [];

@@ -182,14 +182,7 @@ function Home() {
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {BRANCH_SUBJECTS[active.id].filter(matchSubject).map((subject, index) => {
                   const demand = demandForSubject(active.id, subject, index);
-                  return (
-                    <SubjectCard
-                      key={subject.name}
-                      subject={subject}
-                      demand={demand}
-                      branchId={active.id}
-                    />
-                  );
+                  return <SubjectCard key={subject.name} subject={subject} demand={demand} />;
                 })}
               </div>
               {BRANCH_SUBJECTS[active.id].filter(matchSubject).length === 0 && (
@@ -296,11 +289,9 @@ function demandForSubject(branch: BranchId, subject: BranchSubject, fallbackInde
 function SubjectCard({
   subject,
   demand,
-  branchId,
 }: {
   subject: BranchSubject;
   demand: ReturnType<typeof skillDemand>[number] | undefined;
-  branchId: BranchId;
 }) {
   return (
     <article className="flex h-full flex-col rounded-sm border border-border bg-card p-5 transition-colors hover:border-primary/40">
@@ -353,10 +344,9 @@ function SubjectCard({
         ) : (
           <Link
             to="/courses"
-            search={{ branch: branchId }}
-            className="inline-block rounded-sm border border-border px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest transition-colors hover:border-primary/50 hover:text-primary"
+            className="inline-block rounded-sm bg-primary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Browse branch courses ↗
+            View course ↗
           </Link>
         )}
       </div>
