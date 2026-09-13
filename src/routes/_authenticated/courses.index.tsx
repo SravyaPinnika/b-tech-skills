@@ -189,25 +189,27 @@ function CoursesPage() {
                       </div>
                       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{subject.description}</p>
                       <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground"><span className="font-semibold text-foreground">Important topics:</span> {subject.topics.join(", ")}</p>
-                      {subject.courseSlug ? (
-                        <Link
-                          to="/courses/$course"
-                          params={{ course: subject.courseSlug }}
-                          className="mt-4 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-                        >
-                          View course ↗
-                        </Link>
+                      {linkedCourse ? (
+                        <>
+                          <p className="mt-3 text-[11px] text-muted-foreground">
+                            Linked course: <span className="text-foreground">{linkedCourse.title}</span>
+                          </p>
+                          <Link
+                            to="/courses/$course"
+                            params={{ course: linkedCourse.slug }}
+                            className="mt-2 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+                          >
+                            Open {linkedCourse.title} ↗
+                          </Link>
+                        </>
                       ) : (
-                        <Link
-                          to="/courses"
-                          search={{ branch: branchItem.id }}
-                          className="mt-4 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-                        >
-                          View course ↗
-                        </Link>
+                        <p className="mt-3 text-[11px] text-muted-foreground">
+                          No dedicated course yet for this subject.
+                        </p>
                       )}
                     </article>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             );
