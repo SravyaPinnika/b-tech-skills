@@ -177,7 +177,11 @@ function CoursesPage() {
               <div key={branchItem.id}>
                 {branch === "all" && <h3 className="mb-3 font-mono text-xs uppercase tracking-widest text-primary">{branchItem.label} · {branchItem.short}</h3>}
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {subjects.map((subject) => (
+                  {subjects.map((subject) => {
+                    const linkedCourse = subject.courseSlug
+                      ? COURSES.find((c) => c.slug === subject.courseSlug)
+                      : undefined;
+                    return (
                     <article key={`${branchItem.id}-${subject.name}`} className="flex flex-col border border-border bg-card p-4">
                       <div className="flex items-start justify-between gap-3">
                         <h3 className="text-sm font-bold">{subject.name}</h3>
@@ -185,25 +189,27 @@ function CoursesPage() {
                       </div>
                       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{subject.description}</p>
                       <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground"><span className="font-semibold text-foreground">Important topics:</span> {subject.topics.join(", ")}</p>
-                      {subject.courseSlug ? (
-                        <Link
-                          to="/courses/$course"
-                          params={{ course: subject.courseSlug }}
-                          className="mt-4 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-                        >
-                          View course ↗
-                        </Link>
+                      {linkedCourse ? (
+                        <>
+                          <p className="mt-3 text-[11px] text-muted-foreground">
+                            Linked course: <span className="text-foreground">{linkedCourse.title}</span>
+                          </p>
+                          <Link
+                            to="/courses/$course"
+                            params={{ course: linkedCourse.slug }}
+                            className="mt-2 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+                          >
+                            Open {linkedCourse.title} ↗
+                          </Link>
+                        </>
                       ) : (
-                        <Link
-                          to="/courses"
-                          search={{ branch: branchItem.id }}
-                          className="mt-4 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-                        >
-                          View course ↗
-                        </Link>
+                        <p className="mt-3 text-[11px] text-muted-foreground">
+                          No dedicated course yet for this subject.
+                        </p>
                       )}
                     </article>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             );
