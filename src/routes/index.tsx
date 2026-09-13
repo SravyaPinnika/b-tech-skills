@@ -293,6 +293,9 @@ function SubjectCard({
   subject: BranchSubject;
   demand: ReturnType<typeof skillDemand>[number] | undefined;
 }) {
+  const linkedCourse = subject.courseSlug
+    ? COURSES.find((c) => c.slug === subject.courseSlug)
+    : undefined;
   return (
     <article className="flex h-full flex-col rounded-sm border border-border bg-card p-5 transition-colors hover:border-primary/40">
       <div className="flex items-start justify-between gap-2">
