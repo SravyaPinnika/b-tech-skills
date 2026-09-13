@@ -16,6 +16,7 @@ import {
 } from "@/lib/curriculum-progress";
 import { BRANCHES } from "@/data/branches";
 import { coursesForBranchId, type BranchSelection } from "@/data/branch-catalog";
+import { BRANCH_SUBJECTS, type BranchSubject } from "@/data/branch-subjects";
 
 export const Route = createFileRoute("/_authenticated/courses/")({
   validateSearch: (input: Record<string, unknown>): { branch?: BranchSelection } => {
@@ -57,6 +58,11 @@ function CoursesPage() {
 
   const q = query.trim().toLowerCase();
   const branchCourses = useMemo(() => coursesForBranchId(branch), [branch]);
+  const subjectMatches = (subject: BranchSubject) =>
+    !q ||
+    subject.name.toLowerCase().includes(q) ||
+    subject.description.toLowerCase().includes(q) ||
+    subject.topics.some((topic) => topic.toLowerCase().includes(q));
 
   const results = useMemo(() => {
     return branchCourses.map((course) => {
@@ -155,6 +161,53 @@ function CoursesPage() {
           <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             {matchedTopics} topics in {results.length} courses
           </p>
+        </section>
+
+        <section className="space-y-5">
+          <div className="border-b border-border pb-3">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-primary">Main subjects</p>
+            <h2 className="mt-1 text-2xl font-black tracking-tighter">
+              {branch === "all" ? "All branch subjects" : `${BRANCHES.find((item) => item.id === branch)?.label ?? "Branch"} subjects`}
+            </h2>
+          </div>
+          {(branch === "all" ? BRANCHES : BRANCHES.filter((item) => item.id === branch)).map((branchItem) => {
+            const subjects = BRANCH_SUBJECTS[branchItem.id].filter(subjectMatches);
+            if (subjects.length === 0) return null;
+            return (
+              <div key={branchItem.id}>
+                {branch === "all" && <h3 className="mb-3 font-mono text-xs uppercase tracking-widest text-primary">{branchItem.label} · {branchItem.short}</h3>}
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {subjects.map((subject) => (
+                    <article key={`${branchItem.id}-${subject.name}`} className="flex flex-col border border-border bg-card p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="text-sm font-bold">{subject.name}</h3>
+                        <Badge>{subject.difficulty}</Badge>
+                      </div>
+                      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{subject.description}</p>
+                      <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground"><span className="font-semibold text-foreground">Important topics:</span> {subject.topics.join(", ")}</p>
+                      {subject.courseSlug ? (
+                        <Link
+                          to="/courses/$course"
+                          params={{ course: subject.courseSlug }}
+                          className="mt-4 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+                        >
+                          View course ↗
+                        </Link>
+                      ) : (
+                        <Link
+                          to="/courses"
+                          search={{ branch: branchItem.id }}
+                          className="mt-4 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+                        >
+                          View course ↗
+                        </Link>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </section>
 
         <section className="grid gap-3 md:grid-cols-2">
