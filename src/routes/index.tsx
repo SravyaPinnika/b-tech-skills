@@ -3,6 +3,7 @@ import { useState } from "react";
 import { BRANCHES, type BranchId } from "@/data/branches";
 type BranchSelection = BranchId | "all";
 import { BRANCH_SUBJECTS, type BranchSubject } from "@/data/branch-subjects";
+import { skillsForBranchId } from "@/data/branch-catalog";
 import { AppShell } from "@/components/AppShell";
 
 export const Route = createFileRoute("/")({
@@ -213,6 +214,35 @@ function Home() {
 
           {active ? (
             <>
+              <div className="rounded-sm border border-border bg-card p-5">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 className="font-mono text-xs uppercase tracking-widest text-primary">
+                    Skill importance for {active.short} placements
+                  </h3>
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    % of hiring rounds where the skill decides the outcome
+                  </span>
+                </div>
+                <div className="mt-4 grid gap-x-6 gap-y-3 sm:grid-cols-2">
+                  {skillsForBranchId(active.id).map((skill) => (
+                    <div key={skill.slug}>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="text-xs font-semibold tracking-tight">{skill.name}</span>
+                        <span className="font-mono text-xs font-bold text-primary">
+                          {skill.weight}%
+                        </span>
+                      </div>
+                      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-surface-strong">
+                        <div
+                          className="h-full rounded-full bg-primary"
+                          style={{ width: `${skill.weight}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {BRANCH_SUBJECTS[active.id].filter(matchSubject).map((subject) => (
                   <SubjectCard key={subject.name} subject={subject} />
