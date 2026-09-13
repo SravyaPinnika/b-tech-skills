@@ -194,13 +194,9 @@ function CoursesPage() {
                           View course ↗
                         </Link>
                       ) : (
-                        <Link
-                          to="/courses"
-                          search={{ branch: branchItem.id }}
-                          className="mt-4 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
-                        >
-                          View course ↗
-                        </Link>
+                        <span className="mt-4 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                          Covered in branch courses below
+                        </span>
                       )}
                     </article>
                   ))}
