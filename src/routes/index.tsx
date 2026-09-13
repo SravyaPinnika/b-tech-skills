@@ -332,22 +332,32 @@ function SubjectCard({
           </span>
         ))}
       </div>
-      <div className="mt-4 pt-1">
-        {subject.courseSlug ? (
-          <Link
-            to="/courses/$course"
-            params={{ course: subject.courseSlug }}
-            className="inline-block rounded-sm bg-primary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            View course ↗
-          </Link>
+      <div className="mt-4 space-y-2 pt-1">
+        {linkedCourse ? (
+          <>
+            <p className="text-[11px] leading-snug text-muted-foreground">
+              Linked course: <span className="text-foreground">{linkedCourse.title}</span>
+            </p>
+            <Link
+              to="/courses/$course"
+              params={{ course: linkedCourse.slug }}
+              className="inline-block rounded-sm bg-primary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Open {linkedCourse.title} ↗
+            </Link>
+          </>
         ) : (
-          <Link
-            to="/courses"
-            className="inline-block rounded-sm bg-primary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            View course ↗
-          </Link>
+          <>
+            <p className="text-[11px] leading-snug text-muted-foreground">
+              No dedicated course yet — browse the full catalogue for related material.
+            </p>
+            <Link
+              to="/courses"
+              className="inline-block rounded-sm border border-border px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest transition-colors hover:border-primary/50 hover:text-primary"
+            >
+              Browse courses ↗
+            </Link>
+          </>
         )}
       </div>
     </article>
