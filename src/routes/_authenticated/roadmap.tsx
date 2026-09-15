@@ -34,7 +34,8 @@ function RoadmapPage() {
       {roadmap.data && <Button variant="outline" onClick={regenerate} disabled={roadmap.isFetching}><RefreshCw />{roadmap.isFetching ? "Regenerating…" : "Regenerate"}</Button>}
     </header>
     {roadmap.isPending && <Status title="Building your personalised roadmap…" detail="Your branch, semester, skills and goal are being matched." />}
-    {roadmap.isError && <Status title="Your roadmap is not ready" detail={roadmap.error instanceof Error ? roadmap.error.message : "Please complete your profile first."}><Button asChild><Link to="/profile">Complete profile</Link></Button></Status>}
+    {roadmap.isError && <Status title="Your roadmap is not ready" detail={roadmap.error instanceof Error ? roadmap.error.message : "Something went wrong. Please try again."}><Button onClick={() => roadmap.refetch()}>Try again</Button></Status>}
+    {!roadmap.isPending && !roadmap.isError && !roadmap.data && <Status title="Add your details first" detail="Save your branch, year, semester and career goal, and your semester-by-semester plan will be built for you."><Button asChild><Link to="/profile">Go to my profile</Link></Button></Status>}
     {roadmap.data && <>
       <section><SectionTitle>Semester roadmap</SectionTitle><div className="mt-4 space-y-4">{roadmap.data.semesters.map((semester) => <SemesterBlock key={semester.semester} semester={semester} />)}</div></section>
       <section className="grid gap-6 md:grid-cols-2"><ListPanel title="Weekly study plan" items={roadmap.data.weeklyPlan} /><ListPanel title="Key milestones" items={roadmap.data.milestones} /></section>

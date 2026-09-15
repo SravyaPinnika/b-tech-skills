@@ -44,13 +44,13 @@ function keyFor(p: {
 export const getMyRoadmap = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => input.parse(d ?? {}))
-  .handler(async ({ data, context }): Promise<Roadmap> => {
+  .handler(async ({ data, context }): Promise<Roadmap | null> => {
     const { data: profile } = await context.supabase
       .from("student_profiles")
       .select("branch, year, semester, career_goal, target_job, skills, languages, weekly_hours")
       .eq("user_id", context.userId)
       .maybeSingle();
-    if (!profile) throw new Error("Create your profile first to get a roadmap.");
+    if (!profile) return null;
 
     const cacheKey = keyFor(profile);
     if (!data.regenerate) {
