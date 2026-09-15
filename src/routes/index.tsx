@@ -77,7 +77,7 @@ function Home() {
           <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
             <div className="rise">
               <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
-                For B.Tech CSE · IT · AIML · Data Science
+                {""}
               </span>
               <h1 className="mt-3 text-4xl font-black tracking-tighter text-balance sm:text-5xl lg:text-6xl">
                 B.tech  skills  &   career  hub
