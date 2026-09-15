@@ -87,8 +87,14 @@ function Home() {
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  to="/dashboard"
+                  to="/learn"
                   className="rounded-sm bg-primary px-6 py-3 text-center text-sm font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  Start your learning path
+                </Link>
+                <Link
+                  to="/dashboard"
+                  className="rounded-sm border border-border px-6 py-3 text-center text-sm font-bold uppercase tracking-widest transition-colors hover:border-primary/50 hover:text-primary"
                 >
                   Start my roadmap
                 </Link>
