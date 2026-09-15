@@ -7,6 +7,8 @@
 import { BRANCHES, type BranchId } from "./branches";
 import { BRANCH_SUBJECTS, type SubjectDifficulty } from "./branch-subjects";
 
+export type { SubjectDifficulty };
+
 export type LearnTag = "Theory" | "Practical" | "Interview" | "Coding" | "Project";
 
 export interface LearnSubTopic {
