@@ -30,6 +30,7 @@ import { Route as ApiPublicHooksRefreshToolsRouteImport } from './routes/api/pub
 import { Route as AuthenticatedCoursesCourseTopicIndexRouteImport } from './routes/_authenticated/courses.$course.$topic.index'
 import { Route as AuthenticatedCoursesCourseTopicExamRouteImport } from './routes/_authenticated/courses.$course.$topic.exam'
 import { Route as AuthenticatedLearnBranchCourseIndexRouteImport } from './routes/_authenticated/learn.$branch.$course.index'
+import { Route as AuthenticatedLearnBranchCourseSubRouteImport } from './routes/_authenticated/learn.$branch.$course.$sub'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -143,6 +144,12 @@ const AuthenticatedLearnBranchCourseIndexRoute =
     path: '/learn/$branch/$course/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedLearnBranchCourseSubRoute =
+  AuthenticatedLearnBranchCourseSubRouteImport.update({
+    id: '/learn/$branch/$course/$sub',
+    path: '/learn/$branch/$course/$sub',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/courses/$course/': typeof AuthenticatedCoursesCourseIndexRoute
   '/learn/$branch/': typeof AuthenticatedLearnBranchIndexRoute
   '/courses/$course/$topic/exam': typeof AuthenticatedCoursesCourseTopicExamRoute
+  '/learn/$branch/$course/$sub': typeof AuthenticatedLearnBranchCourseSubRoute
   '/courses/$course/$topic/': typeof AuthenticatedCoursesCourseTopicIndexRoute
   '/learn/$branch/$course/': typeof AuthenticatedLearnBranchCourseIndexRoute
 }
@@ -185,6 +193,7 @@ export interface FileRoutesByTo {
   '/courses/$course': typeof AuthenticatedCoursesCourseIndexRoute
   '/learn/$branch': typeof AuthenticatedLearnBranchIndexRoute
   '/courses/$course/$topic/exam': typeof AuthenticatedCoursesCourseTopicExamRoute
+  '/learn/$branch/$course/$sub': typeof AuthenticatedLearnBranchCourseSubRoute
   '/courses/$course/$topic': typeof AuthenticatedCoursesCourseTopicIndexRoute
   '/learn/$branch/$course': typeof AuthenticatedLearnBranchCourseIndexRoute
 }
@@ -209,6 +218,7 @@ export interface FileRoutesById {
   '/_authenticated/courses/$course/': typeof AuthenticatedCoursesCourseIndexRoute
   '/_authenticated/learn/$branch/': typeof AuthenticatedLearnBranchIndexRoute
   '/_authenticated/courses/$course/$topic/exam': typeof AuthenticatedCoursesCourseTopicExamRoute
+  '/_authenticated/learn/$branch/$course/$sub': typeof AuthenticatedLearnBranchCourseSubRoute
   '/_authenticated/courses/$course/$topic/': typeof AuthenticatedCoursesCourseTopicIndexRoute
   '/_authenticated/learn/$branch/$course/': typeof AuthenticatedLearnBranchCourseIndexRoute
 }
@@ -233,6 +243,7 @@ export interface FileRouteTypes {
     | '/courses/$course/'
     | '/learn/$branch/'
     | '/courses/$course/$topic/exam'
+    | '/learn/$branch/$course/$sub'
     | '/courses/$course/$topic/'
     | '/learn/$branch/$course/'
   fileRoutesByTo: FileRoutesByTo
@@ -255,6 +266,7 @@ export interface FileRouteTypes {
     | '/courses/$course'
     | '/learn/$branch'
     | '/courses/$course/$topic/exam'
+    | '/learn/$branch/$course/$sub'
     | '/courses/$course/$topic'
     | '/learn/$branch/$course'
   id:
@@ -278,6 +290,7 @@ export interface FileRouteTypes {
     | '/_authenticated/courses/$course/'
     | '/_authenticated/learn/$branch/'
     | '/_authenticated/courses/$course/$topic/exam'
+    | '/_authenticated/learn/$branch/$course/$sub'
     | '/_authenticated/courses/$course/$topic/'
     | '/_authenticated/learn/$branch/$course/'
   fileRoutesById: FileRoutesById
@@ -439,6 +452,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLearnBranchCourseIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/learn/$branch/$course/$sub': {
+      id: '/_authenticated/learn/$branch/$course/$sub'
+      path: '/learn/$branch/$course/$sub'
+      fullPath: '/learn/$branch/$course/$sub'
+      preLoaderRoute: typeof AuthenticatedLearnBranchCourseSubRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -457,6 +477,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCoursesCourseIndexRoute: typeof AuthenticatedCoursesCourseIndexRoute
   AuthenticatedLearnBranchIndexRoute: typeof AuthenticatedLearnBranchIndexRoute
   AuthenticatedCoursesCourseTopicExamRoute: typeof AuthenticatedCoursesCourseTopicExamRoute
+  AuthenticatedLearnBranchCourseSubRoute: typeof AuthenticatedLearnBranchCourseSubRoute
   AuthenticatedCoursesCourseTopicIndexRoute: typeof AuthenticatedCoursesCourseTopicIndexRoute
   AuthenticatedLearnBranchCourseIndexRoute: typeof AuthenticatedLearnBranchCourseIndexRoute
 }
@@ -477,6 +498,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedLearnBranchIndexRoute: AuthenticatedLearnBranchIndexRoute,
   AuthenticatedCoursesCourseTopicExamRoute:
     AuthenticatedCoursesCourseTopicExamRoute,
+  AuthenticatedLearnBranchCourseSubRoute:
+    AuthenticatedLearnBranchCourseSubRoute,
   AuthenticatedCoursesCourseTopicIndexRoute:
     AuthenticatedCoursesCourseTopicIndexRoute,
   AuthenticatedLearnBranchCourseIndexRoute:
