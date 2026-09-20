@@ -15,5 +15,5 @@ export default defineConfig({
   // Deploy targets: on Netlify/Vercel, set NITRO_PRESET ("netlify" or "vercel") in the
   // platform's environment variables and the build produces that platform's output.
   // Unset (or inside the Lovable sandbox) it keeps the Cloudflare default.
-  nitro: process.env.NITRO_PRESET ? { preset: process.env.NITRO_PRESET } : undefined,
+  nitro: process.env['NITRO_PRESET'] ? { preset: process.env['NITRO_PRESET'] } : true,
 });
