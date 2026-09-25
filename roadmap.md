@@ -23,3 +23,4 @@
 - [ ] Global search (skills, topics, projects, interview questions)
 - [ ] Weekly tools categories improvement
 - [ ] Mobile optimisation pass, UI polish, performance
+- [ ] Netlify production build check of the reorganized folder
