@@ -1,0 +1,586 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.5"
+  }
+  public: {
+    Tables: {
+      applications: {
+        Row: {
+          applied_on: string
+          company: string
+          created_at: string
+          id: string
+          kind: string
+          link: string | null
+          notes: string | null
+          role: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          applied_on?: string
+          company: string
+          created_at?: string
+          id?: string
+          kind?: string
+          link?: string | null
+          notes?: string | null
+          role?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          applied_on?: string
+          company?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          link?: string | null
+          notes?: string | null
+          role?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      concept_content: {
+        Row: {
+          content: Json
+          course_slug: string
+          created_at: string
+          id: string
+          sub_index: number
+          title: string
+          topic_slug: string
+        }
+        Insert: {
+          content: Json
+          course_slug: string
+          created_at?: string
+          id?: string
+          sub_index: number
+          title: string
+          topic_slug: string
+        }
+        Update: {
+          content?: Json
+          course_slug?: string
+          created_at?: string
+          id?: string
+          sub_index?: number
+          title?: string
+          topic_slug?: string
+        }
+        Relationships: []
+      }
+      exam_attempts: {
+        Row: {
+          course_slug: string
+          created_at: string
+          feedback: Json | null
+          id: string
+          kind: string
+          score: number
+          topic_slug: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          course_slug: string
+          created_at?: string
+          feedback?: Json | null
+          id?: string
+          kind: string
+          score: number
+          topic_slug: string
+          total: number
+          user_id: string
+        }
+        Update: {
+          course_slug?: string
+          created_at?: string
+          feedback?: Json | null
+          id?: string
+          kind?: string
+          score?: number
+          topic_slug?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      generated_content: {
+        Row: {
+          cache_key: string
+          created_at: string
+          id: string
+          kind: string
+          payload: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          id?: string
+          kind: string
+          payload: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          payload?: Json
+        }
+        Relationships: []
+      }
+      job_state: {
+        Row: {
+          job_name: string
+          last_message: string | null
+          last_run_at: string | null
+          last_status: string | null
+          lease_until: string | null
+          paused: boolean
+        }
+        Insert: {
+          job_name: string
+          last_message?: string | null
+          last_run_at?: string | null
+          last_status?: string | null
+          lease_until?: string | null
+          paused?: boolean
+        }
+        Update: {
+          job_name?: string
+          last_message?: string | null
+          last_run_at?: string | null
+          last_status?: string | null
+          lease_until?: string | null
+          paused?: boolean
+        }
+        Relationships: []
+      }
+      practice_attempts: {
+        Row: {
+          branch: string
+          created_at: string
+          feedback: Json | null
+          id: string
+          kind: string
+          score: number
+          seconds_taken: number
+          topic: string
+          total: number
+          user_id: string
+          weak_topics: string[]
+        }
+        Insert: {
+          branch?: string
+          created_at?: string
+          feedback?: Json | null
+          id?: string
+          kind: string
+          score?: number
+          seconds_taken?: number
+          topic?: string
+          total?: number
+          user_id: string
+          weak_topics?: string[]
+        }
+        Update: {
+          branch?: string
+          created_at?: string
+          feedback?: Json | null
+          id?: string
+          kind?: string
+          score?: number
+          seconds_taken?: number
+          topic?: string
+          total?: number
+          user_id?: string
+          weak_topics?: string[]
+        }
+        Relationships: []
+      }
+      recruiters: {
+        Row: {
+          added_week: string
+          apply_by: string | null
+          branches: string[]
+          company: string
+          created_at: string
+          ctc_range: string | null
+          current_stage: string | null
+          eligibility: string | null
+          hiring_status: string
+          hiring_window: string | null
+          id: string
+          interview_process: string | null
+          process_stages: string[]
+          project_expectations: string | null
+          role: string
+          skills: string[]
+          url: string | null
+        }
+        Insert: {
+          added_week?: string
+          apply_by?: string | null
+          branches?: string[]
+          company: string
+          created_at?: string
+          ctc_range?: string | null
+          current_stage?: string | null
+          eligibility?: string | null
+          hiring_status?: string
+          hiring_window?: string | null
+          id?: string
+          interview_process?: string | null
+          process_stages?: string[]
+          project_expectations?: string | null
+          role: string
+          skills?: string[]
+          url?: string | null
+        }
+        Update: {
+          added_week?: string
+          apply_by?: string | null
+          branches?: string[]
+          company?: string
+          created_at?: string
+          ctc_range?: string | null
+          current_stage?: string | null
+          eligibility?: string | null
+          hiring_status?: string
+          hiring_window?: string | null
+          id?: string
+          interview_process?: string | null
+          process_stages?: string[]
+          project_expectations?: string | null
+          role?: string
+          skills?: string[]
+          url?: string | null
+        }
+        Relationships: []
+      }
+      student_profiles: {
+        Row: {
+          branch: string
+          career_goal: string
+          created_at: string
+          languages: string[]
+          name: string
+          semester: number
+          skills: string[]
+          target_job: string
+          updated_at: string
+          user_id: string
+          weekly_hours: number
+          year: number
+        }
+        Insert: {
+          branch: string
+          career_goal?: string
+          created_at?: string
+          languages?: string[]
+          name?: string
+          semester?: number
+          skills?: string[]
+          target_job?: string
+          updated_at?: string
+          user_id: string
+          weekly_hours?: number
+          year?: number
+        }
+        Update: {
+          branch?: string
+          career_goal?: string
+          created_at?: string
+          languages?: string[]
+          name?: string
+          semester?: number
+          skills?: string[]
+          target_job?: string
+          updated_at?: string
+          user_id?: string
+          weekly_hours?: number
+          year?: number
+        }
+        Relationships: []
+      }
+      tools: {
+        Row: {
+          added_week: string
+          branches: string[]
+          category: string
+          created_at: string
+          description: string
+          id: string
+          name: string
+          url: string | null
+          why_it_matters: string | null
+        }
+        Insert: {
+          added_week?: string
+          branches?: string[]
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          name: string
+          url?: string | null
+          why_it_matters?: string | null
+        }
+        Update: {
+          added_week?: string
+          branches?: string[]
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          url?: string | null
+          why_it_matters?: string | null
+        }
+        Relationships: []
+      }
+      topic_exams: {
+        Row: {
+          course_slug: string
+          created_at: string
+          id: string
+          kind: string
+          language: string
+          payload: Json
+          topic_slug: string
+        }
+        Insert: {
+          course_slug: string
+          created_at?: string
+          id?: string
+          kind: string
+          language?: string
+          payload: Json
+          topic_slug: string
+        }
+        Update: {
+          course_slug?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          language?: string
+          payload?: Json
+          topic_slug?: string
+        }
+        Relationships: []
+      }
+      user_content: {
+        Row: {
+          cache_key: string
+          created_at: string
+          id: string
+          kind: string
+          payload: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cache_key?: string
+          created_at?: string
+          id?: string
+          kind: string
+          payload: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          payload?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          created_at: string
+          done: boolean
+          id: string
+          item_id: string
+          item_kind: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          item_id: string
+          item_kind: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          item_id?: string
+          item_kind?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never) = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never) = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const
