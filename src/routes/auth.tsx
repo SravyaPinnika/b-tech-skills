@@ -67,18 +67,26 @@ function AuthPage() {
     setBusy(false);
   }
 
-  async function handleGoogle() {
+  
+async function handleGoogle() {
   setError(null);
+  setBusy(true);
+
+  const redirectTo = `${window.location.origin}/auth`;
 
   const { error: err } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-     redirectTo: `${window.location.origin}/auth`,
+      redirectTo,
     },
   });
 
-  if (err) setError(err.message);
+  if (err) {
+    setError(err.message);
+    setBusy(false);
+  }
 }
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="border-b border-border">
