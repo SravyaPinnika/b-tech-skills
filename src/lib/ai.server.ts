@@ -37,7 +37,7 @@ export async function askAi<T>(
           },
         ],
        temperature: 0.2,
-       max_tokens: 4096,
+       max_tokens: 8192,
        stream: false,
        response_format: {
        type: "json_object",
@@ -74,6 +74,12 @@ chat_template_kwargs: {
   }
 
   const choice = result.choices?.[0];
+  if (choice?.finish_reason === "length") {
+  throw new Error(
+    "NVIDIA response was truncated because it reached the token limit. " +
+    "Reduce the requested JSON output or increase max_tokens if supported."
+  );
+}
   let content = choice?.message?.content?.trim() ?? "";
 
   if (!content) {
