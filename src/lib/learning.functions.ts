@@ -1,3 +1,4 @@
+import { askAi as askNvidiaAi } from "@/lib/ai.server";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
@@ -86,33 +87,12 @@ function resolve(courseSlug: string, topicSlug: string): { course: Course; topic
   return { course, topic };
 }
 
-async function askAi<T>(prompt: string, system: string): Promise<T> {
-  const aiKey = process.env["LOVABLE_API_KEY"];
-  if (!aiKey) throw new Error("AI is not configured");
-  const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Lovable-API-Key": aiKey,
-      "X-Lovable-AIG-SDK": "fetch",
-    },
-    body: JSON.stringify({
-      model: "google/gemini-3.7-flash",
-      messages: [
-        { role: "system", content: system },
-        { role: "user", content: prompt },
-      ],
-      response_format: { type: "json_object" },
-    }),
-  });
-  if (res.status === 429) throw new Error("Too many requests right now — please try again in a minute.");
-  if (res.status === 402) throw new Error("AI usage limit reached. Please add credits to continue.");
-  if (!res.ok) throw new Error(`AI request failed (${res.status})`);
-  const payload = (await res.json()) as { choices?: { message?: { content?: string } }[] };
-  const content = payload.choices?.[0]?.message?.content ?? "{}";
-  return JSON.parse(content) as T;
+async function askAi<T>(
+  prompt: string,
+  system: string,
+): Promise<T> {
+  return askNvidiaAi<T>(prompt, system);
 }
-
 async function admin() {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   return supabaseAdmin;
